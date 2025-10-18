@@ -11,7 +11,7 @@
     *{box-sizing:border-box}
     body{margin:0;background:url('b94d7e21-7ddc-42cc-97fd-6cf2f2a15882.png') center/cover fixed, radial-gradient(60% 100% at 50% 0%, #162012, #0b0b0b 50%) fixed;color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,Inter,Arial}
     a{color:var(--gold)}
-    header{padding:28px 20px 10px;display:flex;align-items:center;gap:16px;justify-content:space-between;border-bottom:1px solid #222}
+    header{padding:28px 20px 10px;display:flex;align-items:center;gap:16px;justify-content:space-between;border-bottom:1px solid #222;background:linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);backdrop-filter:blur(10px)}
     .brand{display:flex;align-items:center;gap:14px}
     .logo{width:46px;height:46px;border-radius:12px;background:conic-gradient(from 120deg,#1a1a1a,#26321f,#1a1a1a);display:grid;place-items:center;box-shadow:0 0 0 1px #2a2a2a inset, 0 8px 24px rgba(0,0,0,.45)}
     .logo::before{content:"";width:24px;height:24px;border-radius:50%;background:radial-gradient(#7dcf9b,#1e3a27 70%);filter:blur(.2px)}
@@ -35,6 +35,10 @@
     button{appearance:none;border:1px solid #2a2a2a;background:#181818;color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600}
     button:hover{background:#1f1f1f}
     button.primary{background:linear-gradient(180deg,#1b2b21,#142017);border-color:#2a3a2e}
+    .playlist-btn{background:linear-gradient(180deg,#2a1b21,#201417);border-color:#3a2a2e;font-size:12px;padding:8px 10px}
+    .playlist-btn:hover{background:linear-gradient(180deg,#3a2b31,#302427)}
+    .track.playing{background:#1a2b21;border-color:#3a4a3e}
+    .track.queued{background:#2a1b21;border-color:#3a2a2e}
     .meter, .seek{flex:1;height:10px;background:#0f0f0f;border-radius:999px;border:1px solid #2a2a2a;position:relative}
     .meter .fill, .seek .fill{position:absolute;inset:0 100% 0 0;background:linear-gradient(90deg,#2f6c46,#7bd0a0);border-radius:inherit}
     .knob{width:44px}
@@ -81,17 +85,20 @@
     <!-- Left: Album Covers -->
     <section class="panel">
       <div class="gallery">
-        <div class="cover" data-slot="cutdown" style="background-image: url('Trim mad.png')">
+        <div class="cover" data-slot="cutdown" style="background-image: url('claypot.jpeg')">
           <span class="badge">Cut‑Down</span>
-          <span class="title">BONSAID</span>
         </div>
         <div class="cover" data-slot="growth-extended" style="background-image: url('trim.png')">
           <span class="badge">Growth — Extended</span>
-          <span class="title">BONSAID</span>
         </div>
         <div class="cover" data-slot="flex" style="background-image: url('rootbust.png')">
           <span class="badge">Growth Preview</span>
-          <span class="title">BONSAID</span>
+        </div>
+        <div class="cover" data-slot="growth-full" style="background-image: url('Trim mad.png')">
+          <span class="badge">GROWTH</span>
+        </div>
+        <div class="cover" data-slot="cutdown-alt" style="background-image: url('A sleek bonsai tree .png')">
+          <span class="badge">Cut‑Down Alt</span>
         </div>
       </div>
     </section>
@@ -101,7 +108,9 @@
       <div class="player">
         <audio id="audio" crossorigin="anonymous"></audio>
         <div class="row">
+          <button id="prev" title="Previous Track">⏮</button>
           <button id="play" class="primary">► Play</button>
+          <button id="next" title="Next Track">⏭</button>
           <div class="seek" title="Seek">
             <div class="fill" id="seekFill"></div>
           </div>
@@ -124,31 +133,54 @@
         <canvas id="viz" aria-label="Audio visualizer"></canvas>
       </div>
       <div class="tracks">
-        <div class="track">
+        <div class="track" data-track="0">
           <div>
             <strong>Get Bonzied (Cut-Down)</strong>
-            <small>2.4MB • Ready to play</small>
+            <small>2.9MB • Track 1/5</small>
           </div>
           <div class="row">
-            <button data-load="Get Bonzied (Cut-Down)" data-src="Get Bonzied (Cut-Down Version).mp3">▶ Play Track</button>
+            <button data-load="Get Bonzied (Cut-Down)" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/Get%20Bonzied%20(Cut-Down%20Version).mp3">▶ Play</button>
+            <button data-playlist="0" class="playlist-btn">📋 Add to Queue</button>
           </div>
         </div>
-        <div class="track">
+        <div class="track" data-track="1">
           <div>
             <strong>GET BONSAID – Ext. Growth</strong>
-            <small>5.4MB • Ready to play</small>
+            <small>5.9MB • Track 2/5</small>
           </div>
           <div class="row">
-            <button data-load="GET BONSAID – Ext. Growth" data-src="GET BONSAID – Ext. Growth.mp3">▶ Play Track</button>
+            <button data-load="GET BONSAID – Ext. Growth" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20Ext.%20Growth.mp3">▶ Play</button>
+            <button data-playlist="1" class="playlist-btn">📋 Add to Queue</button>
           </div>
         </div>
-        <div class="track">
+        <div class="track" data-track="2">
           <div>
             <strong>GROWTH (Preview)</strong>
-            <small>1.1MB • Ready to play</small>
+            <small>2.9MB • Track 3/5</small>
           </div>
           <div class="row">
-            <button data-load="GROWTH (Preview)" data-src="GET BONSAID – GROWTH (pr).mp3">▶ Play Track</button>
+            <button data-load="GROWTH (Preview)" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20GROWTH%20(pr).mp3">▶ Play</button>
+            <button data-playlist="2" class="playlist-btn">📋 Add to Queue</button>
+          </div>
+        </div>
+        <div class="track" data-track="3">
+          <div>
+            <strong>GET BONSAID – GROWTH</strong>
+            <small>3.2MB • Track 4/5</small>
+          </div>
+          <div class="row">
+            <button data-load="GET BONSAID – GROWTH" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20GROWTH.mp3">▶ Play</button>
+            <button data-playlist="3" class="playlist-btn">📋 Add to Queue</button>
+          </div>
+        </div>
+        <div class="track" data-track="4">
+          <div>
+            <strong>Get Bonsaid (Cut-Down Alt)</strong>
+            <small>2.9MB • Track 5/5</small>
+          </div>
+          <div class="row">
+            <button data-load="Get Bonsaid (Cut-Down Alt)" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/Get%20Bonsaid%20(Cut-Down%20Version).mp3">▶ Play</button>
+            <button data-playlist="4" class="playlist-btn">📋 Add to Queue</button>
           </div>
         </div>
       </div>
@@ -178,6 +210,8 @@
   const $ = s => document.querySelector(s);
   const audio = $('#audio');
   const playBtn = $('#play');
+  const prevBtn = $('#prev');
+  const nextBtn = $('#next');
   const seek = document.querySelector('.seek');
   const seekFill = $('#seekFill');
   const time = $('#time');
@@ -215,6 +249,16 @@
     if (ctx.state === 'suspended') await ctx.resume();
     if (audio.paused) { audio.play(); playBtn.textContent='❚❚ Pause'; }
     else { audio.pause(); playBtn.textContent='► Play'; }
+  });
+
+  // Navigation controls
+  prevBtn.addEventListener('click', () => {
+    const prevIndex = currentTrackIndex > 0 ? currentTrackIndex - 1 : tracks.length - 1;
+    playTrack(prevIndex);
+  });
+
+  nextBtn.addEventListener('click', () => {
+    nextTrack();
   });
   bassCtl.oninput = e => setBass(parseFloat(e.target.value));
   gainCtl.oninput = e => setGain(parseFloat(e.target.value));
@@ -301,19 +345,75 @@
     });
   });
 
+  // Playlist functionality
+  const playlist = [];
+  let currentTrackIndex = 0;
+  
+  // Track data - using GitHub raw URLs
+  const tracks = [
+    { name: "Get Bonzied (Cut-Down)", src: "https://raw.githubusercontent.com/aerovista-us/bonsaid/main/Get%20Bonzied%20(Cut-Down%20Version).mp3" },
+    { name: "GET BONSAID – Ext. Growth", src: "https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20Ext.%20Growth.mp3" },
+    { name: "GROWTH (Preview)", src: "https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20GROWTH%20(pr).mp3" },
+    { name: "GET BONSAID – GROWTH", src: "https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20GROWTH.mp3" },
+    { name: "Get Bonsaid (Cut-Down Alt)", src: "https://raw.githubusercontent.com/aerovista-us/bonsaid/main/Get%20Bonsaid%20(Cut-Down%20Version).mp3" }
+  ];
+
+  function updateTrackDisplay() {
+    document.querySelectorAll('.track').forEach(track => track.classList.remove('playing', 'queued'));
+    const currentTrack = document.querySelector(`[data-track="${currentTrackIndex}"]`);
+    if(currentTrack) currentTrack.classList.add('playing');
+  }
+
+  function playTrack(index) {
+    if(index >= 0 && index < tracks.length) {
+      currentTrackIndex = index;
+      const track = tracks[index];
+      audio.src = track.src;
+      audio.play();
+      playBtn.textContent = '❚❚ Pause';
+      if(playM) playM.textContent = '❚❚ Pause';
+      if(nowTitle) nowTitle.textContent = track.name;
+      updateTrackDisplay();
+    }
+  }
+
+  function nextTrack() {
+    const nextIndex = (currentTrackIndex + 1) % tracks.length;
+    playTrack(nextIndex);
+  }
+
+  // Auto-advance to next track
+  audio.addEventListener('ended', () => {
+    nextTrack();
+  });
+
   // Track loading - simplified showcase mode
   document.querySelectorAll('button[data-load]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const name = btn.dataset.load;
-      const src = btn.dataset.src;
-      if(!src){ 
-        btn.animate([{transform:'scale(1)'},{transform:'scale(1.06)'}],{duration:150}); 
-        return; 
+      const trackElement = btn.closest('.track');
+      const trackIndex = parseInt(trackElement.dataset.track);
+      playTrack(trackIndex);
+    });
+  });
+
+  // Playlist queue functionality
+  document.querySelectorAll('button[data-playlist]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const trackIndex = parseInt(btn.dataset.playlist);
+      const trackElement = btn.closest('.track');
+      
+      if(playlist.includes(trackIndex)) {
+        // Remove from queue
+        const queueIndex = playlist.indexOf(trackIndex);
+        playlist.splice(queueIndex, 1);
+        trackElement.classList.remove('queued');
+        btn.textContent = '📋 Add to Queue';
+      } else {
+        // Add to queue
+        playlist.push(trackIndex);
+        trackElement.classList.add('queued');
+        btn.textContent = '✅ In Queue';
       }
-      audio.src = src;
-      audio.play(); 
-      playBtn.textContent='❚❚ Pause';
-      if(playM) playM.textContent='❚❚ Pause';
     });
   });
 
