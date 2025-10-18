@@ -41,20 +41,24 @@
     /* Player */
     .player{padding:16px;display:grid;gap:14px}
     .row{display:flex;align-items:center;gap:10px}
-    button{appearance:none;border:1px solid #2a2a2a;background:#181818;color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600}
+    button{appearance:none;border:1px solid #2a2a2a;background:#181818;color:var(--ink);padding:12px 18px;border-radius:12px;cursor:pointer;font-weight:600;min-height:44px;min-width:44px;touch-action:manipulation}
     button:hover{background:#1f1f1f}
-    button.primary{background:linear-gradient(180deg,#1b2b21,#142017);border-color:#2a3a2e}
+    button.primary{background:linear-gradient(180deg,#1b2b21,#142017);border-color:#2a3a2e;padding:14px 20px;font-size:16px}
     .playlist-btn{background:linear-gradient(180deg,#2a1b21,#201417);border-color:#3a2a2e;font-size:12px;padding:8px 10px}
     .playlist-btn:hover{background:linear-gradient(180deg,#3a2b31,#302427)}
     .track.playing{background:#1a2b21;border-color:#3a4a3e}
     .track.queued{background:#2a1b21;border-color:#3a2a2e}
     .track.loaded{background:#1a1a2e;border-color:#2a2a3e;box-shadow:0 0 0 1px #3a3a4e inset}
-    .meter, .seek{flex:1;height:10px;background:#0f0f0f;border-radius:999px;border:1px solid #2a2a2a;position:relative}
+    .meter, .seek{flex:1;height:12px;background:#0f0f0f;border-radius:999px;border:1px solid #2a2a2a;position:relative;cursor:pointer;touch-action:manipulation}
     .meter .fill, .seek .fill{position:absolute;inset:0 100% 0 0;background:linear-gradient(90deg,#2f6c46,#7bd0a0);border-radius:inherit}
     .knob{width:44px}
     .control{display:grid;gap:6px}
     .control label{font-size:12px;color:var(--muted)}
-    input[type=range]{width:160px}
+    input[type=range]{width:160px;height:44px;touch-action:manipulation;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
+    input[type=range]::-webkit-slider-track{background:#0f0f0f;height:8px;border-radius:4px;border:1px solid #2a2a2a}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;height:20px;width:20px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid #1a1a1a;box-shadow:0 2px 6px rgba(0,0,0,0.3)}
+    input[type=range]::-moz-range-track{background:#0f0f0f;height:8px;border-radius:4px;border:1px solid #2a2a2a}
+    input[type=range]::-moz-range-thumb{height:20px;width:20px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid #1a1a1a;box-shadow:0 2px 6px rgba(0,0,0,0.3)}
 
     /* Tracks */
     .tracks{padding:14px;display:grid;gap:12px}
@@ -216,13 +220,13 @@
       <div class="seek" id="seekMobile"><div class="fill" id="seekFillMobile"></div></div>
       <div id="timeMobile" style="min-width:70px;text-align:right;color:var(--muted)">0:00</div>
     </div>
-    <div class="row" style="margin-top:6px">
-      <label for="bassMobile" class="stamp" style="font-size:10px">Bass</label>
-      <input id="bassMobile" type="range" min="-12" max="12" value="0" step="1" style="width:100px"/>
-      <label for="trebleMobile" class="stamp" style="font-size:10px;margin-left:4px">Treble</label>
-      <input id="trebleMobile" type="range" min="-12" max="12" value="0" step="1" style="width:100px"/>
-      <label for="volMobile" class="stamp" style="font-size:10px;margin-left:4px">Vol</label>
-      <input id="volMobile" type="range" min="0" max="1" value="0.9" step="0.01" style="width:80px"/>
+    <div class="row" style="margin-top:8px;gap:8px">
+      <label for="bassMobile" class="stamp" style="font-size:11px;min-width:40px">Bass</label>
+      <input id="bassMobile" type="range" min="-12" max="12" value="0" step="1" style="width:120px;height:44px"/>
+      <label for="trebleMobile" class="stamp" style="font-size:11px;min-width:50px">Treble</label>
+      <input id="trebleMobile" type="range" min="-12" max="12" value="0" step="1" style="width:120px;height:44px"/>
+      <label for="volMobile" class="stamp" style="font-size:11px;min-width:30px">Vol</label>
+      <input id="volMobile" type="range" min="0" max="1" value="0.9" step="0.01" style="width:100px;height:44px"/>
     </div>
   </div>
 
@@ -282,8 +286,15 @@
   masterGain.connect(analyser);
   analyser.connect(ctx.destination);
 
-  // Enhanced audio controls
-  function setBass(db){ lowShelf.gain.value = db; }
+  // Enhanced audio controls with dramatic bass boost
+  function setBass(db){ 
+    // Dramatic bass boost at maximum setting
+    if(db >= 12) {
+      lowShelf.gain.value = db * 2; // Double the bass at max setting
+    } else {
+      lowShelf.gain.value = db; // Normal progression for other values
+    }
+  }
   function setTreble(db){ highShelf.gain.value = db; }
   function setGain(db){ preGain.gain.value = Math.pow(10, db/20); }
   function setVol(v){ masterGain.gain.value = v; }
