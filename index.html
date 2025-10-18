@@ -39,6 +39,7 @@
     .playlist-btn:hover{background:linear-gradient(180deg,#3a2b31,#302427)}
     .track.playing{background:#1a2b21;border-color:#3a4a3e}
     .track.queued{background:#2a1b21;border-color:#3a2a2e}
+    .track.loaded{background:#1a1a2e;border-color:#2a2a3e;box-shadow:0 0 0 1px #3a3a4e inset}
     .meter, .seek{flex:1;height:10px;background:#0f0f0f;border-radius:999px;border:1px solid #2a2a2a;position:relative}
     .meter .fill, .seek .fill{position:absolute;inset:0 100% 0 0;background:linear-gradient(90deg,#2f6c46,#7bd0a0);border-radius:inherit}
     .knob{width:44px}
@@ -191,7 +192,7 @@
   <div class="sticky-player" id="sticky">
     <div class="row">
       <button id="playMobile" class="primary" style="min-width:74px">► Play</button>
-      <div class="title" id="nowTitle">No track loaded</div>
+      <div class="title" id="nowTitle">Get Bonzied (Cut-Down)</div>
       <div class="seek" id="seekMobile"><div class="fill" id="seekFillMobile"></div></div>
       <div id="timeMobile" style="min-width:70px;text-align:right;color:var(--muted)">0:00</div>
     </div>
@@ -386,6 +387,28 @@
   audio.addEventListener('ended', () => {
     nextTrack();
   });
+
+  // Preload first track on page load
+  function preloadFirstTrack() {
+    if(tracks.length > 0) {
+      audio.src = tracks[0].src;
+      if(nowTitle) nowTitle.textContent = tracks[0].name;
+      updateTrackDisplay();
+      updateLoadedTrack();
+    }
+  }
+
+  // Initialize first track when page loads
+  preloadFirstTrack();
+
+  // Add visual indicator for loaded track
+  function updateLoadedTrack() {
+    document.querySelectorAll('.track').forEach(track => {
+      track.classList.remove('loaded');
+    });
+    const currentTrack = document.querySelector(`[data-track="${currentTrackIndex}"]`);
+    if(currentTrack) currentTrack.classList.add('loaded');
+  }
 
   // Track loading - simplified showcase mode
   document.querySelectorAll('button[data-load]').forEach(btn => {
