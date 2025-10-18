@@ -25,16 +25,18 @@
 
     .panel{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--panel);border:1px solid #242424;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35);overflow:hidden}
 
-    /* Gallery */
-    .gallery{display:grid;grid-template-columns:1fr;gap:12px;padding:14px}
-    .cover{position:relative;aspect-ratio:4/3;background:#111 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="%231f1f1f"/><stop offset="1" stop-color="%23121212"/></linearGradient></defs><rect fill="url(%23g)" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23a89f8b" font-size="18" font-family="Arial">BONSAID</text></svg>') center/cover no-repeat;border-radius:12px;display:grid;place-items:end stretch;overflow:hidden;min-height:200px}
-    .cover[data-slot="cutdown"]{aspect-ratio:3/4}
-    .cover[data-slot="growth-extended"]{aspect-ratio:4/3}
-    .cover[data-slot="flex"]{aspect-ratio:1/1}
-    .cover[data-slot="growth-full"]{aspect-ratio:4/3}
-    .cover[data-slot="cutdown-alt"]{aspect-ratio:3/4}
-    .cover .title{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);padding:6px 10px;border-radius:10px;border:1px solid #2a2a2a;font-weight:600}
-    .cover .badge{position:absolute;right:10px;top:10px;background:rgba(209,168,90,.12);border:1px solid rgba(209,168,90,.35);color:var(--gold);padding:4px 8px;border-radius:999px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+    /* Slideshow */
+    .slideshow-container{padding:14px;position:relative}
+    .slideshow{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;min-height:300px}
+    .slide{position:absolute;top:0;left:0;width:100%;height:100%;background:#111 center/cover no-repeat;display:grid;place-items:end stretch;opacity:0;transition:opacity 0.5s ease-in-out}
+    .slide.active{opacity:1}
+    .slide .badge{position:absolute;right:10px;top:10px;background:rgba(209,168,90,.12);border:1px solid rgba(209,168,90,.35);color:var(--gold);padding:4px 8px;border-radius:999px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+    .slideshow-controls{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px}
+    .slide-btn{appearance:none;border:1px solid #2a2a2a;background:#181818;color:var(--ink);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:16px;transition:all 0.2s ease}
+    .slide-btn:hover{background:#1f1f1f;border-color:#3a3a3a}
+    .slide-indicators{display:flex;gap:6px}
+    .indicator{width:8px;height:8px;border-radius:50%;background:#2a2a2a;cursor:pointer;transition:all 0.2s ease}
+    .indicator.active{background:var(--gold)}
 
     /* Player */
     .player{padding:16px;display:grid;gap:14px}
@@ -92,21 +94,28 @@
   <main class="wrap">
     <!-- Left: Album Covers -->
     <section class="panel">
-      <div class="gallery">
-        <div class="cover" data-slot="cutdown" style="background-image: url('claypot.jpeg')">
-          <span class="badge">Cut‑Down</span>
+      <div class="slideshow-container">
+        <div class="slideshow" id="slideshow">
+          <div class="slide active" data-track="0" style="background-image: url('claypot.jpeg')">
+            <span class="badge">Cut‑Down</span>
+          </div>
+          <div class="slide" data-track="1" style="background-image: url('trim.png')">
+            <span class="badge">Growth — Extended</span>
+          </div>
+          <div class="slide" data-track="2" style="background-image: url('rootbust.png')">
+            <span class="badge">Growth Preview</span>
+          </div>
+          <div class="slide" data-track="3" style="background-image: url('Trim mad.png')">
+            <span class="badge">GROWTH</span>
+          </div>
+          <div class="slide" data-track="4" style="background-image: url('cracked pot.jpeg')">
+            <span class="badge">Cut‑Down Alt</span>
+          </div>
         </div>
-        <div class="cover" data-slot="growth-extended" style="background-image: url('trim.png')">
-          <span class="badge">Growth — Extended</span>
-        </div>
-        <div class="cover" data-slot="flex" style="background-image: url('rootbust.png')">
-          <span class="badge">Growth Preview</span>
-        </div>
-        <div class="cover" data-slot="growth-full" style="background-image: url('Trim mad.png')">
-          <span class="badge">GROWTH</span>
-        </div>
-        <div class="cover" data-slot="cutdown-alt" style="background-image: url('cracked pot.jpeg')">
-          <span class="badge">Cut-Down Alt</span>
+        <div class="slideshow-controls">
+          <button id="prevSlide" class="slide-btn">‹</button>
+          <div class="slide-indicators" id="indicators"></div>
+          <button id="nextSlide" class="slide-btn">›</button>
         </div>
       </div>
     </section>
@@ -447,7 +456,47 @@
     });
   });
 
-  // Cover art is now static - no upload functionality
+  // Slideshow functionality
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const indicators = document.getElementById('indicators');
+  const prevBtn = document.getElementById('prevSlide');
+  const nextBtn = document.getElementById('nextSlide');
+  
+  // Create indicators
+  slides.forEach((_, index) => {
+    const indicator = document.createElement('div');
+    indicator.className = 'indicator';
+    if(index === 0) indicator.classList.add('active');
+    indicator.addEventListener('click', () => goToSlide(index));
+    indicators.appendChild(indicator);
+  });
+  
+  function goToSlide(index) {
+    slides[currentSlide].classList.remove('active');
+    indicators.children[currentSlide].classList.remove('active');
+    
+    currentSlide = index;
+    slides[currentSlide].classList.add('active');
+    indicators.children[currentSlide].classList.add('active');
+  }
+  
+  function nextSlide() {
+    const next = (currentSlide + 1) % slides.length;
+    goToSlide(next);
+  }
+  
+  function prevSlide() {
+    const prev = (currentSlide - 1 + slides.length) % slides.length;
+    goToSlide(prev);
+  }
+  
+  // Event listeners
+  nextBtn.addEventListener('click', nextSlide);
+  prevBtn.addEventListener('click', prevSlide);
+  
+  // Auto-rotate slideshow every 4 seconds
+  setInterval(nextSlide, 4000);
 })();
 </script>
 </body>
