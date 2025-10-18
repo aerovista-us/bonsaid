@@ -44,8 +44,6 @@
     button{appearance:none;border:1px solid #2a2a2a;background:#181818;color:var(--ink);padding:12px 18px;border-radius:12px;cursor:pointer;font-weight:600;min-height:44px;min-width:44px;touch-action:manipulation}
     button:hover{background:#1f1f1f}
     button.primary{background:linear-gradient(180deg,#1b2b21,#142017);border-color:#2a3a2e;padding:14px 20px;font-size:16px}
-    .playlist-btn{background:linear-gradient(180deg,#2a1b21,#201417);border-color:#3a2a2e;font-size:12px;padding:8px 10px}
-    .playlist-btn:hover{background:linear-gradient(180deg,#3a2b31,#302427)}
     .track.playing{background:#1a2b21;border-color:#3a4a3e}
     .track.queued{background:#2a1b21;border-color:#3a2a2e}
     .track.loaded{background:#1a1a2e;border-color:#2a2a3e;box-shadow:0 0 0 1px #3a3a4e inset}
@@ -165,7 +163,6 @@
           </div>
           <div class="row">
             <button data-load="Get Bonzied (Cut-Down)" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/%E2%80%9CGet%20Bonzied%20(Cut-Down%20Version).mp3">▶ Play</button>
-            <button data-playlist="0" class="playlist-btn">📋 Add to Queue</button>
           </div>
         </div>
         <div class="track" data-track="1">
@@ -175,7 +172,6 @@
           </div>
           <div class="row">
             <button data-load="GET BONSAID – Ext. Growth" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20Ext.%20Growth.mp3">▶ Play</button>
-            <button data-playlist="1" class="playlist-btn">📋 Add to Queue</button>
           </div>
         </div>
         <div class="track" data-track="2">
@@ -185,7 +181,6 @@
           </div>
           <div class="row">
             <button data-load="GROWTH (Preview)" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20GROWTH%20(pr).mp3">▶ Play</button>
-            <button data-playlist="2" class="playlist-btn">📋 Add to Queue</button>
           </div>
         </div>
         <div class="track" data-track="3">
@@ -195,7 +190,6 @@
           </div>
           <div class="row">
             <button data-load="GET BONSAID – GROWTH" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20GROWTH.mp3">▶ Play</button>
-            <button data-playlist="3" class="playlist-btn">📋 Add to Queue</button>
           </div>
         </div>
         <div class="track" data-track="4">
@@ -205,7 +199,6 @@
           </div>
           <div class="row">
             <button data-load="Get Bonsaid (Cut-Down Alt)" data-src="https://raw.githubusercontent.com/aerovista-us/bonsaid/main/Get%20Bonsaid%20(Cut-Down%20Version).mp3">▶ Play</button>
-            <button data-playlist="4" class="playlist-btn">📋 Add to Queue</button>
           </div>
         </div>
       </div>
@@ -410,7 +403,6 @@
   });
 
   // Playlist functionality
-  const playlist = [];
   let currentTrackIndex = 0;
   
   // Track data - using GitHub raw URLs
@@ -482,26 +474,6 @@
     });
   });
 
-  // Playlist queue functionality
-  document.querySelectorAll('button[data-playlist]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const trackIndex = parseInt(btn.dataset.playlist);
-      const trackElement = btn.closest('.track');
-      
-      if(playlist.includes(trackIndex)) {
-        // Remove from queue
-        const queueIndex = playlist.indexOf(trackIndex);
-        playlist.splice(queueIndex, 1);
-        trackElement.classList.remove('queued');
-        btn.textContent = '📋 Add to Queue';
-      } else {
-        // Add to queue
-        playlist.push(trackIndex);
-        trackElement.classList.add('queued');
-        btn.textContent = '✅ In Queue';
-      }
-    });
-  });
 
   // Slideshow functionality
   let currentSlide = 0;
