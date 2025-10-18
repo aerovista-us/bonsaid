@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BONSAID — Album Showcase</title>
+  <style>
+    :root{
+      --bg:#0d0d0d; --panel:#141414; --ink:#e9e5da; --muted:#a89f8b; --gold:#d1a85a; --accent:#8ccf9e; --emerald:#5ac29a; --danger:#ff6b6b;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(60% 100% at 50% 0%, #162012, #0b0b0b 50%) fixed;color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,Inter,Arial}
+    a{color:var(--gold)}
+    header{padding:28px 20px 10px;display:flex;align-items:center;gap:16px;justify-content:space-between;border-bottom:1px solid #222}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:46px;height:46px;border-radius:12px;background:conic-gradient(from 120deg,#1a1a1a,#26321f,#1a1a1a);display:grid;place-items:center;box-shadow:0 0 0 1px #2a2a2a inset, 0 8px 24px rgba(0,0,0,.45)}
+    .logo::before{content:"";width:24px;height:24px;border-radius:50%;background:radial-gradient(#7dcf9b,#1e3a27 70%);filter:blur(.2px)}
+    h1{margin:0;font-size:clamp(26px,3.4vw,42px);letter-spacing:.06em}
+    .stamp{color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+
+    .wrap{display:grid;grid-template-columns:360px 1fr;gap:24px;padding:20px;max-width:1200px;margin:0 auto}
+    @media (max-width: 980px){.wrap{grid-template-columns:1fr}}
+
+    .panel{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--panel);border:1px solid #242424;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35);overflow:hidden}
+
+    /* Gallery */
+    .gallery{display:grid;grid-template-columns:1fr;gap:12px;padding:14px}
+    .cover{position:relative;aspect-ratio:1/1;background:#111 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="%231f1f1f"/><stop offset="1" stop-color="%23121212"/></linearGradient></defs><rect fill="url(%23g)" width="300" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23a89f8b" font-size="22" font-family="Arial">Drop cover art</text></svg>') center/cover no-repeat;border-radius:12px;display:grid;place-items:end stretch;overflow:hidden}
+    .cover input{display:none}
+    .cover .title{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);padding:6px 10px;border-radius:10px;border:1px solid #2a2a2a;font-weight:600}
+    .cover .badge{position:absolute;right:10px;top:10px;background:rgba(209,168,90,.12);border:1px solid rgba(209,168,90,.35);color:var(--gold);padding:4px 8px;border-radius:999px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+    .drop{outline:2px dashed #2b3a2b;outline-offset:-10px}
+
+    /* Player */
+    .player{padding:16px;display:grid;gap:14px}
+    .row{display:flex;align-items:center;gap:10px}
+    button{appearance:none;border:1px solid #2a2a2a;background:#181818;color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600}
+    button:hover{background:#1f1f1f}
+    button.primary{background:linear-gradient(180deg,#1b2b21,#142017);border-color:#2a3a2e}
+    .meter, .seek{flex:1;height:10px;background:#0f0f0f;border-radius:999px;border:1px solid #2a2a2a;position:relative}
+    .meter .fill, .seek .fill{position:absolute;inset:0 100% 0 0;background:linear-gradient(90deg,#2f6c46,#7bd0a0);border-radius:inherit}
+    .knob{width:44px}
+    .control{display:grid;gap:6px}
+    .control label{font-size:12px;color:var(--muted)}
+    input[type=range]{width:160px}
+
+    /* Tracks */
+    .tracks{padding:14px;display:grid;gap:12px}
+    .track{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#101010;border:1px solid #242424;border-radius:12px;padding:10px}
+    .track small{display:block;color:var(--muted)}
+    .track input[type=file], .track input[type=url]{max-width:100%}
+
+    canvas{width:100%;height:84px;background:#0b0b0b;border-radius:12px;border:1px solid #222}
+    footer{padding:18px 20px;color:var(--muted);text-align:center}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>BONSAID — Album Showcase</h1>
+        <div class="stamp">An AeroVista Production · EchoVerse Audio</div>
+      </div>
+    </div>
+    <div class="stamp">Bass‑Boost Player (Web Audio EQ)</div>
+  </header>
+
+  <main class="wrap">
+    <!-- Left: Covers / Uploads -->
+    <section class="panel">
+      <div class="gallery">
+        <div class="cover" data-slot="cutdown" title="Drop image or click to upload">
+          <span class="badge">Cut‑Down</span>
+          <span class="title">BONSAID</span>
+          <input type="file" accept="image/*" />
+        </div$1        <div class="cover" data-slot="growth-extended" title="Drop image or click to upload">
+          <span class="badge">Growth — Extended</span>
+          <span class="title">BONSAID</span>
+          <input type="file" accept="image/*" />
+        </div>
+        <div class="cover" data-slot="flex" title="Drop image or click to upload">
+          <span class="badge">Aesthetic Flex</span>
+          <span class="title">BONSAID</span>
+          <input type="file" accept="image/*" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Player / Controls / Tracks -->
+    <section class="panel">
+      <div class="player">
+        <audio id="audio" crossorigin="anonymous"></audio>
+        <div class="row">
+          <button id="play" class="primary">► Play</button>
+          <div class="seek" title="Seek">
+            <div class="fill" id="seekFill"></div>
+          </div>
+          <div id="time" style="min-width:90px;text-align:right;color:var(--muted)">0:00 / 0:00</div>
+        </div>
+        <div class="row">
+          <div class="control">
+            <label for="bass">Bass Boost</label>
+            <input id="bass" type="range" min="0" max="18" value="8" step="1" />
+          </div>
+          <div class="control">
+            <label for="gain">Gain</label>
+            <input id="gain" type="range" min="-12" max="12" value="0" step="1" />
+          </div>
+          <div class="control">
+            <label for="vol">Volume</label>
+            <input id="vol" type="range" min="0" max="1" value="0.9" step="0.01" />
+          </div>
+        </div>
+        <canvas id="viz" aria-label="Audio visualizer"></canvas>
+      </div>
+      <div class="tracks">
+        <div class="track">
+          <div>
+            <strong>Cut‑Down</strong>
+            <small>Upload MP3 or paste URL</small>
+          </div>
+          <div class="row">
+            <input type="file" accept="audio/mpeg,audio/mp3" data-track="Cut‑Down" />
+            <input type="url" placeholder="https://…/cut-down.mp3" data-url="Cut‑Down" />
+            <button data-load="Cut‑Down">Load</button>
+          </div>
+        </div>$1
+        <div class="track">
+          <div>
+            <strong>Growth — Extended</strong>
+            <small>Upload MP3 or paste URL</small>
+          </div>
+          <div class="row">
+            <input type="file" accept="audio/mpeg,audio/mp3" data-track="Growth — Extended" />
+            <input type="url" placeholder="https://…/growth-extended.mp3" data-url="Growth — Extended" />
+            <button data-load="Growth — Extended">Load</button>
+          </di
+        <div class="track">
+          <div>
+            <strong>Aesthetic Flex</strong>
+            <small>Upload MP3 or paste URL</small>
+          </div>
+          <div class="row">
+            <input type="file" accept="audio/mpeg,audio/mp3" data-track="Aesthetic Flex" />
+            <input type="url" placeholder="https://…/aesthetic-flex.mp3" data-url="Aesthetic Flex" />
+            <button data-load="Aesthetic Flex">Load</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>© <span id="yr"></span> AeroVista · BONSAID — All rights reserved.</footer>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const audio = $('#audio');
+  const playBtn = $('#play');
+  const seek = document.querySelector('.seek');
+  const seekFill = $('#seekFill');
+  const time = $('#time');
+  const bassCtl = $('#bass');
+  const gainCtl = $('#gain');
+  const volCtl = $('#vol');
+  const viz = $('#viz');
+  const yr = $('#yr'); yr.textContent = new Date().getFullYear();
+
+  // --- Web Audio Graph ---
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const src = ctx.createMediaElementSource(audio);
+  const masterGain = ctx.createGain();
+  const lowShelf = ctx.createBiquadFilter(); lowShelf.type='lowshelf'; lowShelf.frequency.value = 90; // bass band
+  const preGain = ctx.createGain();
+  const analyser = ctx.createAnalyser(); analyser.fftSize = 1024;
+
+  // chain: src -> preGain -> lowShelf -> masterGain -> analyser -> destination
+  src.connect(preGain);
+  preGain.connect(lowShelf);
+  lowShelf.connect(masterGain);
+  masterGain.connect(analyser);
+  analyser.connect(ctx.destination);
+
+  // defaults
+  function setBass(db){ lowShelf.gain.value = db; }
+  function setGain(db){ preGain.gain.value = Math.pow(10, db/20); }
+  function setVol(v){ masterGain.gain.value = v; }
+  setBass(parseFloat(bassCtl.value));
+  setGain(parseFloat(gainCtl.value));
+  setVol(parseFloat(volCtl.value));
+
+  // Controls
+  playBtn.addEventListener('click', async () => {
+    if (ctx.state === 'suspended') await ctx.resume();
+    if (audio.paused) { audio.play(); playBtn.textContent='❚❚ Pause'; }
+    else { audio.pause(); playBtn.textContent='► Play'; }
+  });
+  bassCtl.oninput = e => setBass(parseFloat(e.target.value));
+  gainCtl.oninput = e => setGain(parseFloat(e.target.value));
+  volCtl.oninput  = e => setVol(parseFloat(e.target.value));
+
+  // Seek bar
+  audio.addEventListener('timeupdate', () => {
+    if(!isFinite(audio.duration)) return;
+    const p = audio.currentTime / audio.duration;
+    seekFill.style.inset = `0 ${Math.max(0,100 - p*100)}% 0 0`;
+    time.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+  });
+  seek.addEventListener('click', e => {
+    const r = seek.getBoundingClientRect();
+    const p = (e.clientX - r.left) / r.width;
+    if(isFinite(audio.duration)) audio.currentTime = Math.max(0, Math.min(1,p)) * audio.duration;
+  });
+  function fmt(s){ if(!isFinite(s)) return '0:00'; const m=Math.floor(s/60), sec=Math.floor(s%60).toString().padStart(2,'0'); return `${m}:${sec}`; }
+
+  // Visualizer
+  const g = viz.getContext('2d');
+  const buffer = new Uint8Array(analyser.frequencyBinCount);
+  function draw(){
+    requestAnimationFrame(draw);
+    analyser.getByteFrequencyData(buffer);
+    const w = viz.width = viz.clientWidth * devicePixelRatio;
+    const h = viz.height = viz.clientHeight * devicePixelRatio;
+    g.clearRect(0,0,w,h);
+    const bars = 64; const step = Math.floor(buffer.length / bars);
+    for(let i=0;i<bars;i++){
+      const v = buffer[i*step]/255; // 0..1
+      const bh = v * (h*0.85);
+      const x = i*(w/bars)+2, barW = (w/bars)-4;
+      const grad = g.createLinearGradient(0,0,0,h);
+      grad.addColorStop(0,'#7bd0a0'); grad.addColorStop(1,'#2f6c46');
+      g.fillStyle = grad;
+      g.fillRect(x, h-bh, barW, bh);
+    }
+  }
+  draw();
+
+  // Track loading helpers
+  const files = new Map();
+  document.querySelectorAll('input[type=file][data-track]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const f = inp.files?.[0]; if(!f) return;
+      files.set(inp.dataset.track, URL.createObjectURL(f));
+    });
+  });
+  document.querySelectorAll('button[data-load]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.dataset.load;
+      const urlField = document.querySelector(`input[type=url][data-url="${name}"]`);
+      const url = (urlField?.value?.trim()) || files.get(name);
+      if(!url){ btn.animate([{transform:'scale(1)'},{transform:'scale(1.06)'}],{duration:150}); return; }
+      audio.src = url;
+      audio.play(); playBtn.textContent='❚❚ Pause';
+    });
+  });
+
+  // Cover uploads (drag & drop)
+  document.querySelectorAll('.cover').forEach(c => {
+    const input = c.querySelector('input[type=file]');
+    c.addEventListener('click', () => input.click());
+    c.addEventListener('dragover', e => { e.preventDefault(); c.classList.add('drop'); });
+    c.addEventListener('dragleave', () => c.classList.remove('drop'));
+    c.addEventListener('drop', e => {
+      e.preventDefault(); c.classList.remove('drop');
+      const f = e.dataTransfer.files?.[0]; if(!f) return;
+      const url = URL.createObjectURL(f); c.style.backgroundImage = `url('${url}')`;
+    });
+    input.addEventListener('change', () => {
+      const f = input.files?.[0]; if(!f) return;
+      const url = URL.createObjectURL(f); c.style.backgroundImage = `url('${url}')`;
+    });
+  });
+})();
+</script>
+</body>
+</html>
