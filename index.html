@@ -135,8 +135,12 @@
         </div>
         <div class="row">
           <div class="control">
-            <label for="bass">Bass Boost</label>
-            <input id="bass" type="range" min="0" max="18" value="8" step="1" />
+            <label for="bass">Bass</label>
+            <input id="bass" type="range" min="-12" max="12" value="0" step="1" />
+          </div>
+          <div class="control">
+            <label for="treble">Treble</label>
+            <input id="treble" type="range" min="-12" max="12" value="0" step="1" />
           </div>
           <div class="control">
             <label for="gain">Gain</label>
@@ -214,9 +218,11 @@
     </div>
     <div class="row" style="margin-top:6px">
       <label for="bassMobile" class="stamp" style="font-size:10px">Bass</label>
-      <input id="bassMobile" type="range" min="0" max="18" value="8" step="1" style="width:140px"/>
-      <label for="volMobile" class="stamp" style="font-size:10px;margin-left:8px">Vol</label>
-      <input id="volMobile" type="range" min="0" max="1" value="0.9" step="0.01" style="width:120px"/>
+      <input id="bassMobile" type="range" min="-12" max="12" value="0" step="1" style="width:100px"/>
+      <label for="trebleMobile" class="stamp" style="font-size:10px;margin-left:4px">Treble</label>
+      <input id="trebleMobile" type="range" min="-12" max="12" value="0" step="1" style="width:100px"/>
+      <label for="volMobile" class="stamp" style="font-size:10px;margin-left:4px">Vol</label>
+      <input id="volMobile" type="range" min="0" max="1" value="0.9" step="0.01" style="width:80px"/>
     </div>
   </div>
 
@@ -233,31 +239,58 @@
   const seekFill = $('#seekFill');
   const time = $('#time');
   const bassCtl = $('#bass');
+  const trebleCtl = $('#treble');
   const gainCtl = $('#gain');
   const volCtl = $('#vol');
   const viz = $('#viz');
   const yr = $('#yr'); yr.textContent = new Date().getFullYear();
 
-  // --- Web Audio Graph ---
+  // --- Enhanced Web Audio Graph ---
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const src = ctx.createMediaElementSource(audio);
   const masterGain = ctx.createGain();
-  const lowShelf = ctx.createBiquadFilter(); lowShelf.type='lowshelf'; lowShelf.frequency.value = 90; // bass band
+  
+  // Enhanced EQ with multiple bands
+  const lowShelf = ctx.createBiquadFilter(); 
+  lowShelf.type = 'lowshelf'; 
+  lowShelf.frequency.value = 90;
+  lowShelf.gain.value = 0;
+  
+  const highShelf = ctx.createBiquadFilter();
+  highShelf.type = 'highshelf';
+  highShelf.frequency.value = 3000;
+  highShelf.gain.value = 0;
+  
+  const compressor = ctx.createDynamicsCompressor();
+  compressor.threshold.value = -24;
+  compressor.knee.value = 30;
+  compressor.ratio.value = 12;
+  compressor.attack.value = 0.003;
+  compressor.release.value = 0.25;
+  
   const preGain = ctx.createGain();
-  const analyser = ctx.createAnalyser(); analyser.fftSize = 1024;
+  const analyser = ctx.createAnalyser(); 
+  analyser.fftSize = 2048; // Higher resolution for better visualization
+  analyser.smoothingTimeConstant = 0.8;
 
-  // chain: src -> preGain -> lowShelf -> masterGain -> analyser -> destination
+  // Enhanced chain: src -> preGain -> lowShelf -> highShelf -> compressor -> masterGain -> analyser -> destination
   src.connect(preGain);
   preGain.connect(lowShelf);
-  lowShelf.connect(masterGain);
+  lowShelf.connect(highShelf);
+  highShelf.connect(compressor);
+  compressor.connect(masterGain);
   masterGain.connect(analyser);
   analyser.connect(ctx.destination);
 
-  // defaults
+  // Enhanced audio controls
   function setBass(db){ lowShelf.gain.value = db; }
+  function setTreble(db){ highShelf.gain.value = db; }
   function setGain(db){ preGain.gain.value = Math.pow(10, db/20); }
   function setVol(v){ masterGain.gain.value = v; }
+  
+  // Initialize controls
   setBass(parseFloat(bassCtl.value));
+  setTreble(parseFloat(trebleCtl.value));
   setGain(parseFloat(gainCtl.value));
   setVol(parseFloat(volCtl.value));
 
@@ -278,6 +311,7 @@
     nextTrack();
   });
   bassCtl.oninput = e => setBass(parseFloat(e.target.value));
+  trebleCtl.oninput = e => setTreble(parseFloat(e.target.value));
   gainCtl.oninput = e => setGain(parseFloat(e.target.value));
   volCtl.oninput  = e => setVol(parseFloat(e.target.value));
 
@@ -323,6 +357,7 @@
   const seekFillM = document.getElementById('seekFillMobile');
   const timeM = document.getElementById('timeMobile');
   const bassM = document.getElementById('bassMobile');
+  const trebleM = document.getElementById('trebleMobile');
   const volM  = document.getElementById('volMobile');
   const nowTitle = document.getElementById('nowTitle');
 
@@ -350,6 +385,7 @@
     });
   }
   if(bassM){ bassM.oninput = e => { setBass(parseFloat(e.target.value)); bassCtl.value = e.target.value; }; }
+  if(trebleM){ trebleM.oninput = e => { setTreble(parseFloat(e.target.value)); trebleCtl.value = e.target.value; }; }
   if(volM){ volM.oninput  = e => { setVol(parseFloat(e.target.value)); volCtl.value = e.target.value; }; }
 
   audio.addEventListener('timeupdate', syncMobile);
