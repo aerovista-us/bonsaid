@@ -460,8 +460,8 @@
   let currentSlide = 0;
   const slides = document.querySelectorAll('.slide');
   const indicators = document.getElementById('indicators');
-  const prevBtn = document.getElementById('prevSlide');
-  const nextBtn = document.getElementById('nextSlide');
+  const prevSlideBtn = document.getElementById('prevSlide');
+  const nextSlideBtn = document.getElementById('nextSlide');
   
   // Create indicators
   slides.forEach((_, index) => {
@@ -492,8 +492,8 @@
   }
   
   // Event listeners
-  nextBtn.addEventListener('click', nextSlide);
-  prevBtn.addEventListener('click', prevSlide);
+  nextSlideBtn.addEventListener('click', nextSlide);
+  prevSlideBtn.addEventListener('click', prevSlide);
   
   // Auto-rotate slideshow every 4 seconds
   setInterval(nextSlide, 4000);
