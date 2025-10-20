@@ -16,6 +16,9 @@
     .logo{width:46px;height:46px;border-radius:12px;background:conic-gradient(from 120deg,#1a1a1a,#26321f,#1a1a1a);display:grid;place-items:center;box-shadow:0 0 0 1px #2a2a2a inset, 0 8px 24px rgba(0,0,0,.45)}
     .logo::before{content:"";width:24px;height:24px;border-radius:50%;background:radial-gradient(#7dcf9b,#1e3a27 70%);filter:blur(.2px)}
     h1{margin:0;font-size:clamp(26px,3.4vw,42px);letter-spacing:.06em}
+    .subtitle{margin-top:4px}
+    .player-title{color:var(--accent);font-size:14px;font-weight:600;letter-spacing:.05em}
+    .eq-title{color:var(--muted);font-size:11px;letter-spacing:.08em;margin-top:2px}
     .stamp{color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
 
     .wrap{display:grid;grid-template-columns:360px 1fr;gap:24px;padding:20px;max-width:1200px;margin:0 auto}
@@ -53,14 +56,18 @@
     .control{display:grid;gap:8px;padding:8px;background:rgba(20,20,20,0.5);border-radius:8px;border:1px solid #333;transition:all 0.2s ease}
     .control:hover{background:rgba(30,30,30,0.7);border-color:#444}
     .control label{font-size:12px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;text-align:center}
+    .slider-container{display:flex;align-items:center;gap:8px;width:100%;justify-content:center}
+    .eq-btn{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2a2a2a,#1a1a1a);border:2px solid #3a3a3a;color:var(--gold);font-size:16px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;box-shadow:0 2px 4px rgba(0,0,0,0.3)}
+    .eq-btn:hover{background:linear-gradient(135deg,#3a3a3a,#2a2a2a);border-color:var(--gold);transform:scale(1.1);box-shadow:0 4px 8px rgba(0,0,0,0.4)}
+    .eq-btn:active{transform:scale(0.95);box-shadow:0 1px 2px rgba(0,0,0,0.5)}
     .value-display{font-size:11px;color:var(--accent);font-weight:700;text-align:center;background:rgba(139,195,74,0.1);padding:2px 6px;border-radius:4px;border:1px solid rgba(139,195,74,0.3);min-width:40px}
-    input[type=range]{width:160px;height:44px;touch-action:manipulation;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;outline:none}
-    input[type=range]::-webkit-slider-track{background:linear-gradient(90deg,#2a2a2a,#1a1a1a,#2a2a2a);height:12px;border-radius:6px;border:2px solid #3a3a3a;box-shadow:inset 0 2px 4px rgba(0,0,0,0.3), 0 1px 2px rgba(255,255,255,0.1)}
-    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;height:24px;width:24px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8941f);cursor:pointer;border:3px solid #1a1a1a;box-shadow:0 4px 8px rgba(0,0,0,0.4), 0 0 0 2px rgba(209,168,90,0.3), inset 0 1px 2px rgba(255,255,255,0.2);transition:all 0.2s ease}
+    input[type=range]{width:120px;height:44px;touch-action:manipulation;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;outline:none}
+    input[type=range]::-webkit-slider-track{background:linear-gradient(90deg,#2a2a2a,#1a1a1a,#2a2a2a);height:16px;border-radius:8px;border:3px solid #3a3a3a;box-shadow:inset 0 3px 6px rgba(0,0,0,0.4), 0 2px 4px rgba(255,255,255,0.1), inset 0 0 0 1px rgba(139,195,74,0.2)}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;height:28px;width:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8941f);cursor:pointer;border:3px solid #1a1a1a;box-shadow:0 4px 8px rgba(0,0,0,0.4), 0 0 0 2px rgba(209,168,90,0.3), inset 0 1px 2px rgba(255,255,255,0.2);transition:all 0.2s ease}
     input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.1);box-shadow:0 6px 12px rgba(0,0,0,0.5), 0 0 0 3px rgba(209,168,90,0.5), inset 0 1px 2px rgba(255,255,255,0.3)}
     input[type=range]::-webkit-slider-thumb:active{transform:scale(1.05);box-shadow:0 2px 4px rgba(0,0,0,0.6), 0 0 0 4px rgba(209,168,90,0.7), inset 0 1px 2px rgba(255,255,255,0.4)}
-    input[type=range]::-moz-range-track{background:linear-gradient(90deg,#2a2a2a,#1a1a1a,#2a2a2a);height:12px;border-radius:6px;border:2px solid #3a3a3a;box-shadow:inset 0 2px 4px rgba(0,0,0,0.3), 0 1px 2px rgba(255,255,255,0.1)}
-    input[type=range]::-moz-range-thumb{height:24px;width:24px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8941f);cursor:pointer;border:3px solid #1a1a1a;box-shadow:0 4px 8px rgba(0,0,0,0.4), 0 0 0 2px rgba(209,168,90,0.3), inset 0 1px 2px rgba(255,255,255,0.2);transition:all 0.2s ease}
+    input[type=range]::-moz-range-track{background:linear-gradient(90deg,#2a2a2a,#1a1a1a,#2a2a2a);height:16px;border-radius:8px;border:3px solid #3a3a3a;box-shadow:inset 0 3px 6px rgba(0,0,0,0.4), 0 2px 4px rgba(255,255,255,0.1), inset 0 0 0 1px rgba(139,195,74,0.2)}
+    input[type=range]::-moz-range-thumb{height:28px;width:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8941f);cursor:pointer;border:3px solid #1a1a1a;box-shadow:0 4px 8px rgba(0,0,0,0.4), 0 0 0 2px rgba(209,168,90,0.3), inset 0 1px 2px rgba(255,255,255,0.2);transition:all 0.2s ease}
     input[type=range]::-moz-range-thumb:hover{transform:scale(1.1);box-shadow:0 6px 12px rgba(0,0,0,0.5), 0 0 0 3px rgba(209,168,90,0.5), inset 0 1px 2px rgba(255,255,255,0.3)}
     input[type=range]::-moz-range-thumb:active{transform:scale(1.05);box-shadow:0 2px 4px rgba(0,0,0,0.6), 0 0 0 4px rgba(209,168,90,0.7), inset 0 1px 2px rgba(255,255,255,0.4)}
 
@@ -84,6 +91,13 @@
     .wrap{grid-template-columns:1fr;gap:16px}
     .player{display:none} /* hide desktop player on mobile */
     .sticky-player{display:block}
+    header{padding:20px 16px 8px;flex-direction:column;align-items:flex-start;gap:12px}
+    .brand{flex-direction:row;align-items:center;gap:12px}
+    h1{font-size:clamp(22px,4vw,28px);line-height:1.2}
+    .subtitle{margin-top:6px}
+    .player-title{font-size:13px}
+    .eq-title{font-size:10px;margin-top:1px}
+    .stamp{font-size:10px;margin-top:4px}
   }
 </style>
 </head>
@@ -93,10 +107,13 @@
       <div class="logo" aria-hidden="true"></div>
       <div>
         <h1>BONSAID — Album Showcase</h1>
+        <div class="subtitle">
+          <div class="player-title">Bass‑Boost Player</div>
+          <div class="eq-title">(Web Audio EQ)</div>
+        </div>
         <div class="stamp">An AeroVista Production · EchoVerse Audio</div>
       </div>
     </div>
-    <div class="stamp">Bass‑Boost Player (Web Audio EQ)</div>
   </header>
 
   <main class="wrap">
@@ -130,22 +147,38 @@
         <div class="row">
           <div class="control">
             <label for="bass">Bass</label>
-            <input id="bass" type="range" min="-12" max="12" value="0" step="1" />
+            <div class="slider-container">
+              <button class="eq-btn minus" data-target="bass">−</button>
+              <input id="bass" type="range" min="-12" max="12" value="0" step="1" />
+              <button class="eq-btn plus" data-target="bass">+</button>
+            </div>
             <div class="value-display" id="bassValue">0dB</div>
           </div>
           <div class="control">
             <label for="treble">Treble</label>
-            <input id="treble" type="range" min="-12" max="12" value="0" step="1" />
+            <div class="slider-container">
+              <button class="eq-btn minus" data-target="treble">−</button>
+              <input id="treble" type="range" min="-12" max="12" value="0" step="1" />
+              <button class="eq-btn plus" data-target="treble">+</button>
+            </div>
             <div class="value-display" id="trebleValue">0dB</div>
           </div>
           <div class="control">
             <label for="gain">Gain</label>
-            <input id="gain" type="range" min="-12" max="12" value="0" step="1" />
+            <div class="slider-container">
+              <button class="eq-btn minus" data-target="gain">−</button>
+              <input id="gain" type="range" min="-12" max="12" value="0" step="1" />
+              <button class="eq-btn plus" data-target="gain">+</button>
+            </div>
             <div class="value-display" id="gainValue">0dB</div>
           </div>
           <div class="control">
             <label for="vol">Volume</label>
-            <input id="vol" type="range" min="0" max="1" value="0.9" step="0.01" />
+            <div class="slider-container">
+              <button class="eq-btn minus" data-target="vol">−</button>
+              <input id="vol" type="range" min="0" max="1" value="0.9" step="0.01" />
+              <button class="eq-btn plus" data-target="vol">+</button>
+            </div>
             <div class="value-display" id="volValue">90%</div>
           </div>
         </div>
@@ -336,6 +369,47 @@
     volValue.textContent = `${Math.round(e.target.value * 100)}%`;
   };
 
+  // +/- Button handlers for EQ controls
+  document.querySelectorAll('.eq-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      const isPlus = btn.classList.contains('plus');
+      const control = $(`#${target}`);
+      const valueDisplay = $(`#${target}Value`);
+      
+      if (!control) return;
+      
+      const currentValue = parseFloat(control.value);
+      const step = target === 'vol' ? 0.01 : 1;
+      const min = parseFloat(control.min);
+      const max = parseFloat(control.max);
+      
+      let newValue;
+      if (isPlus) {
+        newValue = Math.min(max, currentValue + step);
+      } else {
+        newValue = Math.max(min, currentValue - step);
+      }
+      
+      control.value = newValue;
+      
+      // Update the corresponding function
+      if (target === 'bass') {
+        setBass(newValue);
+        valueDisplay.textContent = `${newValue}dB`;
+      } else if (target === 'treble') {
+        setTreble(newValue);
+        valueDisplay.textContent = `${newValue}dB`;
+      } else if (target === 'gain') {
+        setGain(newValue);
+        valueDisplay.textContent = `${newValue}dB`;
+      } else if (target === 'vol') {
+        setVol(newValue);
+        valueDisplay.textContent = `${Math.round(newValue * 100)}%`;
+      }
+    });
+  });
+
   // Seek bar
   audio.addEventListener('timeupdate', () => {
     if(!isFinite(audio.duration)) return;
@@ -376,40 +450,41 @@
     const centerX = w / 2;
     const baseY = h - 20;
     
-    // Calculate side bar areas
-    const leftBarStart = 20;
-    const rightBarStart = w - 20;
-    const barWidth = 15;
+    // Calculate side bar areas - edge aligned
+    const leftBarStart = 0; // Start at left edge
+    const rightBarStart = w; // Start at right edge  
+    const barWidth = 20;
     
     // Calculate overall audio energy for growth
     const audioEnergy = buffer.reduce((sum, val) => sum + val, 0) / (buffer.length * 255);
     const growthFactor = Math.min(1, audioEnergy * 2);
     
-    // Draw pine tree bars on both sides
-    const sideBars = Math.floor(bars / 3); // Use 1/3 of bars for each side
+    // Draw wider pine tree bars on both sides
+    const sideBars = Math.floor(bars / 2.5); // Use more bars for each side (40% each)
     const centerBars = bars - (sideBars * 2);
     
-    // Left side pine tree bars
+    // Left side pine tree bars - left aligned to edge
     for(let i = 0; i < sideBars; i++){
       const v = buffer[i * step] / 255;
       if (v < 0.05) continue;
       
       const barHeight = v * (h * 0.8);
-      const barX = leftBarStart + (i / sideBars) * barWidth;
+      const barX = leftBarStart + (i / sideBars) * (barWidth * 6); // Left aligned spread
       const barY = baseY - barHeight;
+      const barWidth2 = 20 + v * 40; // Keep same width as before
       
-      // Draw pine tree-shaped bar
+      // Draw wider pine tree-shaped bar
       context.fillStyle = `rgba(139, 195, 74, ${v * 0.8})`;
       context.beginPath();
       context.moveTo(barX, baseY);
-      context.lineTo(barX + 3, barY);
-      context.lineTo(barX + 6, baseY);
+      context.lineTo(barX + barWidth2/2, barY);
+      context.lineTo(barX + barWidth2, baseY);
       context.closePath();
       context.fill();
       
-      // Add pine needles texture
-      for(let j = 0; j < Math.floor(v * 8); j++){
-        const needleX = barX + Math.random() * 6;
+      // Add more pine needles texture for wider bars
+      for(let j = 0; j < Math.floor(v * 20); j++){
+        const needleX = barX + Math.random() * barWidth2;
         const needleY = barY + Math.random() * barHeight;
         const needleSize = Math.random() * 2 + 1;
         
@@ -420,27 +495,28 @@
       }
     }
     
-    // Right side pine tree bars
+    // Right side pine tree bars - right aligned to edge and 50% wider
     for(let i = 0; i < sideBars; i++){
       const v = buffer[(sideBars + centerBars + i) * step] / 255;
       if (v < 0.05) continue;
       
       const barHeight = v * (h * 0.8);
-      const barX = rightBarStart - (i / sideBars) * barWidth;
+      const barX = rightBarStart - (i / sideBars) * (barWidth * 9); // Right aligned spread (50% wider)
       const barY = baseY - barHeight;
+      const barWidth2 = 30 + v * 60; // 50% wider bars (30-90px vs 20-60px)
       
-      // Draw pine tree-shaped bar
+      // Draw wider pine tree-shaped bar
       context.fillStyle = `rgba(139, 195, 74, ${v * 0.8})`;
       context.beginPath();
       context.moveTo(barX, baseY);
-      context.lineTo(barX - 3, barY);
-      context.lineTo(barX - 6, baseY);
+      context.lineTo(barX - barWidth2/2, barY);
+      context.lineTo(barX - barWidth2, baseY);
       context.closePath();
       context.fill();
       
-      // Add pine needles texture
-      for(let j = 0; j < Math.floor(v * 8); j++){
-        const needleX = barX - Math.random() * 6;
+      // Add more pine needles texture for wider bars
+      for(let j = 0; j < Math.floor(v * 20); j++){
+        const needleX = barX - Math.random() * barWidth2;
         const needleY = barY + Math.random() * barHeight;
         const needleSize = Math.random() * 2 + 1;
         
@@ -459,18 +535,35 @@
     context.fillStyle = '#654321';
     context.fillRect(centerX - 25, baseY - 8, 50, 8);
     
-    // Main trunk with swaying motion
-    const trunkHeight = Math.max(20, (buffer[0] / 255) * (h * 0.6));
-    const sway = Math.sin(growthTime * 2) * 3 * growthFactor;
-    const trunkSway = Math.sin(growthTime * 1.5) * 2 * growthFactor;
+    // Short, wide bonsai trunk with more authentic proportions
+    const trunkHeight = Math.max(25, (buffer[0] / 255) * (h * 0.5)); // Shorter trunk
+    const sway = Math.sin(growthTime * 2) * 1.5 * growthFactor;
+    const trunkSway = Math.sin(growthTime * 1.5) * 1 * growthFactor;
     
-    context.strokeStyle = '#4A4A4A';
-    context.lineWidth = 8;
+    // Draw thicker, more gnarled trunk with S-curve
+    context.strokeStyle = '#3A3A3A';
+    context.lineWidth = 14;
     context.lineCap = 'round';
     context.beginPath();
     context.moveTo(centerX + sway, baseY);
-    context.lineTo(centerX + trunkSway, baseY - trunkHeight);
+    // Add S-curve to trunk
+    context.quadraticCurveTo(
+      centerX + trunkSway + 5, baseY - trunkHeight * 0.3,
+      centerX + trunkSway, baseY - trunkHeight
+    );
     context.stroke();
+    
+    // Add trunk texture and gnarling
+    for(let i = 0; i < 3; i++){
+      const knotX = centerX + trunkSway + (Math.random() - 0.5) * 8;
+      const knotY = baseY - trunkHeight + Math.random() * trunkHeight;
+      const knotSize = Math.random() * 3 + 2;
+      
+      context.fillStyle = `rgba(50, 50, 50, 0.6)`;
+      context.beginPath();
+      context.arc(knotX, knotY, knotSize, 0, Math.PI * 2);
+      context.fill();
+    }
     
     // Draw root system first (underground)
     for(let i = 0; i < 8; i++){
@@ -487,56 +580,65 @@
       context.stroke();
     }
     
-    // Draw bonsai tree in center using center frequency bars
-    const padCount = Math.min(4, Math.floor(audioEnergy * 6) + 2); // 2-4 pads to prevent overcrowding
+    // Draw short, wide bonsai with clear horizontal layers
+    const padCount = Math.min(6, Math.floor(audioEnergy * 10) + 4); // 4-6 pads for layered structure
     const padPositions = [];
     
-    // Create distinct foliage pads with better spacing using center bars
+    // Create distinct horizontal foliage layers
     for(let p = 0; p < padCount; p++){
       const padEnergy = buffer[(sideBars + p * Math.floor(centerBars / padCount)) * step] / 255;
       if (padEnergy < 0.05) continue;
       
-      // Position pads at different heights with more vertical spacing
-      const padHeight = baseY - trunkHeight + (p / (padCount - 1)) * trunkHeight * 0.7;
-      const padAngle = (p / padCount) * Math.PI * 1.5 + Math.sin(growthTime * 0.5) * 0.2; // Reduced angle range
-      const padDistance = 12 + padEnergy * 25; // Reduced distance
-      const padX = centerX + trunkSway + Math.cos(padAngle) * padDistance;
-      const padY = padHeight + Math.sin(padAngle) * padDistance * 0.15;
+      // Position pads in clear horizontal layers (short and wide)
+      const layerHeight = baseY - trunkHeight + (p / (padCount - 1)) * trunkHeight * 0.8;
+      const layerWidth = 20 + padEnergy * 50; // Much wider layers
+      const padX = centerX + trunkSway + (Math.random() - 0.5) * layerWidth;
+      const padY = layerHeight;
       
-      padPositions.push({x: padX, y: padY, energy: padEnergy, angle: padAngle});
+      padPositions.push({x: padX, y: padY, energy: padEnergy, layer: p});
       
-      // Draw branch to pad
-      context.strokeStyle = `rgba(74, 74, 74, ${padEnergy * 0.8})`;
-      context.lineWidth = Math.max(2, padEnergy * 4);
-      context.beginPath();
-      context.moveTo(centerX + trunkSway, baseY - trunkHeight);
-      context.quadraticCurveTo(
-        centerX + trunkSway + Math.cos(padAngle) * padDistance * 0.4,
-        padHeight - 8,
-        padX, padY
-      );
-      context.stroke();
+      // Draw multiple branches for each layer
+      for(let b = 0; b < 3; b++){
+        const branchAngle = (b / 3) * Math.PI * 1.5 - Math.PI * 0.75; // Spread branches
+        const branchLength = 15 + padEnergy * 25;
+        const branchX = centerX + trunkSway + Math.cos(branchAngle) * branchLength;
+        const branchY = layerHeight + Math.sin(branchAngle) * branchLength * 0.1;
+        
+        // Draw branch
+        context.strokeStyle = `rgba(60, 60, 60, ${padEnergy * 0.8})`;
+        context.lineWidth = Math.max(2, padEnergy * 4);
+        context.beginPath();
+        context.moveTo(centerX + trunkSway, layerHeight);
+        context.quadraticCurveTo(
+          centerX + trunkSway + Math.cos(branchAngle) * branchLength * 0.6,
+          layerHeight - 3,
+          branchX, branchY
+        );
+        context.stroke();
+      }
     }
     
-    // Draw foliage pads
+    // Draw clear horizontal foliage layers
     padPositions.forEach((pad, index) => {
-      const padSway = Math.sin(growthTime * 2 + index * 0.8) * 2 * pad.energy; // Reduced sway
+      const padSway = Math.sin(growthTime * 1.2 + index * 0.4) * 1 * pad.energy; // Gentle sway
       const padX = pad.x + padSway;
       const padY = pad.y;
-      const padSize = 12 + pad.energy * 20; // Reduced base size
-      const padDensity = Math.floor(pad.energy * 8) + 3; // Reduced density
+      const layerWidth = 25 + pad.energy * 40; // Wide horizontal layers
+      const layerHeight = 8 + pad.energy * 12; // Short height
+      const padDensity = Math.floor(pad.energy * 8) + 3;
       
-      // Create cloud-like foliage pad
+      // Create wide, flat foliage layers
       context.fillStyle = `rgba(139, 195, 74, ${pad.energy * 0.8})`;
       context.beginPath();
       
-      // Draw main pad shape (cloud-like)
-      const padPoints = 12;
-      for(let i = 0; i < padPoints; i++){
-        const angle = (i / padPoints) * Math.PI * 2;
-        const radius = padSize + Math.sin(angle * 3) * padSize * 0.3;
-        const x = padX + Math.cos(angle) * radius;
-        const y = padY + Math.sin(angle) * radius * 0.6;
+      // Draw wide, flat layer shape
+      const layerPoints = 12;
+      for(let i = 0; i < layerPoints; i++){
+        const angle = (i / layerPoints) * Math.PI * 2;
+        const radiusX = layerWidth + Math.sin(angle * 3) * layerWidth * 0.1;
+        const radiusY = layerHeight + Math.sin(angle * 2) * layerHeight * 0.3;
+        const x = padX + Math.cos(angle) * radiusX;
+        const y = padY + Math.sin(angle) * radiusY;
         
         if (i === 0) {
           context.moveTo(x, y);
@@ -547,11 +649,11 @@
       context.closePath();
       context.fill();
       
-      // Add pad texture with smaller circles
+      // Add layer texture with more detail
       for(let i = 0; i < padDensity; i++){
-        const textureX = padX + (Math.random() - 0.5) * padSize * 1.2; // Reduced spread
-        const textureY = padY + (Math.random() - 0.5) * padSize * 0.6; // Reduced spread
-        const textureSize = Math.random() * 2 + 1; // Smaller texture circles
+        const textureX = padX + (Math.random() - 0.5) * layerWidth;
+        const textureY = padY + (Math.random() - 0.5) * layerHeight;
+        const textureSize = Math.random() * 2 + 1;
         
         context.fillStyle = `rgba(101, 153, 74, ${pad.energy * 0.6})`;
         context.beginPath();
@@ -559,11 +661,11 @@
         context.fill();
       }
       
-      // Add pad highlight for high energy
-      if (pad.energy > 0.6) {
+      // Add layer highlight for depth
+      if (pad.energy > 0.4) {
         context.fillStyle = `rgba(255, 255, 255, ${pad.energy * 0.2})`;
         context.beginPath();
-        context.ellipse(padX, padY - padSize * 0.2, padSize * 0.6, padSize * 0.3, 0, 0, Math.PI * 2);
+        context.ellipse(padX, padY - layerHeight * 0.3, layerWidth * 0.6, layerHeight * 0.4, 0, 0, Math.PI * 2);
         context.fill();
       }
     });
