@@ -4,12 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BONSAID — Album Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <style>
     :root{
       --bg:#0d0d0d; --panel:#141414; --ink:#e9e5da; --muted:#a89f8b; --gold:#d1a85a; --accent:#8ccf9e; --emerald:#5ac29a; --danger:#ff6b6b;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:url('b94d7e21-7ddc-42cc-97fd-6cf2f2a15882.png') center/cover fixed, radial-gradient(60% 100% at 50% 0%, #162012, #0b0b0b 50%) fixed;color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,Inter,Arial}
+    body{margin:0;background:url('bg.png') center/cover fixed, radial-gradient(60% 100% at 50% 0%, #162012, #0b0b0b 50%) fixed;color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,Inter,Arial}
     a{color:var(--gold)}
     header{padding:28px 20px 10px;display:flex;align-items:center;gap:16px;justify-content:space-between;border-bottom:1px solid #222;background:linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);backdrop-filter:blur(10px)}
     .brand{display:flex;align-items:center;gap:14px}
@@ -47,7 +48,7 @@
     button{appearance:none;border:1px solid #2a2a2a;background:#181818;color:var(--ink);padding:12px 18px;border-radius:12px;cursor:pointer;font-weight:600;min-height:44px;min-width:44px;touch-action:manipulation}
     button:hover{background:#1f1f1f}
     button.primary{background:linear-gradient(180deg,#1b2b21,#142017);border-color:#2a3a2e;padding:14px 20px;font-size:16px}
-    .track.playing{background:#1a2b21;border-color:#3a4a3e}
+    .track.playing{background:#1a1a2e;border-color:#3a3a4e;box-shadow:0 0 0 1px #3a3a4e inset}
     .track.queued{background:#2a1b21;border-color:#3a2a2e}
     .track.loaded{background:#1a1a2e;border-color:#2a2a3e;box-shadow:0 0 0 1px #3a3a4e inset}
     .meter, .seek{flex:1;height:12px;background:#0f0f0f;border-radius:999px;border:1px solid #2a2a2a;position:relative;cursor:pointer;touch-action:manipulation}
@@ -155,24 +156,6 @@
             <div class="value-display" id="bassValue">0dB</div>
           </div>
           <div class="control">
-            <label for="treble">Treble</label>
-            <div class="slider-container">
-              <button class="eq-btn minus" data-target="treble">−</button>
-              <input id="treble" type="range" min="-12" max="12" value="0" step="1" />
-              <button class="eq-btn plus" data-target="treble">+</button>
-            </div>
-            <div class="value-display" id="trebleValue">0dB</div>
-          </div>
-          <div class="control">
-            <label for="gain">Gain</label>
-            <div class="slider-container">
-              <button class="eq-btn minus" data-target="gain">−</button>
-              <input id="gain" type="range" min="-12" max="12" value="0" step="1" />
-              <button class="eq-btn plus" data-target="gain">+</button>
-            </div>
-            <div class="value-display" id="gainValue">0dB</div>
-          </div>
-          <div class="control">
             <label for="vol">Volume</label>
             <div class="slider-container">
               <button class="eq-btn minus" data-target="vol">−</button>
@@ -247,8 +230,6 @@
     <div class="row" style="margin-top:8px;gap:8px">
       <label for="bassMobile" class="stamp" style="font-size:11px;min-width:40px">Bass</label>
       <input id="bassMobile" type="range" min="-12" max="12" value="0" step="1" style="width:120px;height:48px;background:transparent;cursor:pointer;outline:none"/>
-      <label for="trebleMobile" class="stamp" style="font-size:11px;min-width:50px">Treble</label>
-      <input id="trebleMobile" type="range" min="-12" max="12" value="0" step="1" style="width:120px;height:48px;background:transparent;cursor:pointer;outline:none"/>
       <label for="volMobile" class="stamp" style="font-size:11px;min-width:30px">Vol</label>
       <input id="volMobile" type="range" min="0" max="1" value="0.9" step="0.01" style="width:100px;height:48px;background:transparent;cursor:pointer;outline:none"/>
     </div>
@@ -267,7 +248,6 @@
   const seekFill = $('#seekFill');
   const time = $('#time');
   const bassCtl = $('#bass');
-  const trebleCtl = $('#treble');
   const gainCtl = $('#gain');
   const volCtl = $('#vol');
   const viz = $('#viz');
@@ -279,55 +259,84 @@
   const src = ctx.createMediaElementSource(audio);
   const masterGain = ctx.createGain();
   
-  // Enhanced EQ with multiple bands
-  const lowShelf = ctx.createBiquadFilter(); 
-  lowShelf.type = 'lowshelf'; 
-  lowShelf.frequency.value = 90;
-  lowShelf.gain.value = 0;
+  // Competition-style bass processing - AEROBASS system
+  const subBass = ctx.createBiquadFilter(); 
+  subBass.type = 'lowshelf'; 
+  subBass.frequency.value = 60; // Deep sub-bass
+  subBass.gain.value = 0;
   
-  const highShelf = ctx.createBiquadFilter();
-  highShelf.type = 'highshelf';
-  highShelf.frequency.value = 3000;
-  highShelf.gain.value = 0;
+  const midBass = ctx.createBiquadFilter();
+  midBass.type = 'lowshelf';
+  midBass.frequency.value = 120; // Mid-bass punch
+  midBass.gain.value = 0;
+  
+  const bassPunch = ctx.createBiquadFilter();
+  bassPunch.type = 'peaking';
+  bassPunch.frequency.value = 80; // Bass punch frequency
+  bassPunch.Q.value = 1.5;
+  bassPunch.gain.value = 0;
   
   const compressor = ctx.createDynamicsCompressor();
-  compressor.threshold.value = -24;
-  compressor.knee.value = 30;
-  compressor.ratio.value = 12;
-  compressor.attack.value = 0.003;
-  compressor.release.value = 0.25;
+  compressor.threshold.value = -18;
+  compressor.knee.value = 20;
+  compressor.ratio.value = 6;
+  compressor.attack.value = 0.001;
+  compressor.release.value = 0.1;
   
-  const preGain = ctx.createGain();
+  // Add a limiter to prevent clipping
+  const limiter = ctx.createDynamicsCompressor();
+  limiter.threshold.value = -3; // Just below 0dB to prevent clipping
+  limiter.knee.value = 0; // Hard limiting
+  limiter.ratio.value = 20; // Very high ratio for limiting
+  limiter.attack.value = 0.001; // Very fast attack
+  limiter.release.value = 0.01; // Fast release
+  
   const analyser = ctx.createAnalyser(); 
-  analyser.fftSize = 2048; // Higher resolution for better visualization
+  analyser.fftSize = 2048;
   analyser.smoothingTimeConstant = 0.8;
 
-  // Enhanced chain: src -> preGain -> lowShelf -> highShelf -> compressor -> masterGain -> analyser -> destination
-  src.connect(preGain);
-  preGain.connect(lowShelf);
-  lowShelf.connect(highShelf);
-  highShelf.connect(compressor);
-  compressor.connect(masterGain);
+  // Competition chain: src -> subBass -> midBass -> bassPunch -> compressor -> limiter -> masterGain -> analyser -> destination
+  src.connect(subBass);
+  subBass.connect(midBass);
+  midBass.connect(bassPunch);
+  bassPunch.connect(compressor);
+  compressor.connect(limiter);
+  limiter.connect(masterGain);
   masterGain.connect(analyser);
   analyser.connect(ctx.destination);
 
-  // Enhanced audio controls with dramatic bass boost
+  // AEROBASS competition-style bass enhancement with proper limiting
   function setBass(db){ 
-    // Dramatic bass boost at maximum setting
-    if(db >= 12) {
-      lowShelf.gain.value = db * 2; // Double the bass at max setting
+    if (db >= 11) {
+      // AEROBASS mode - competition settings with anti-clipping
+      subBass.gain.value = 12; // Reduced from 15 to prevent clipping
+      midBass.gain.value = 10; // Reduced from 12
+      bassPunch.gain.value = 6; // Reduced from 8
+      compressor.threshold.value = -30; // More aggressive threshold
+      compressor.knee.value = 30; // Softer knee for smoother limiting
+      compressor.ratio.value = 12; // Higher ratio for better limiting
+      compressor.attack.value = 0.0005; // Faster attack
+      compressor.release.value = 0.05; // Faster release
     } else {
-      lowShelf.gain.value = db; // Normal progression for other values
+      // Normal bass boost
+      const subBoost = db * 0.8; // Sub-bass
+      const midBoost = db * 0.6; // Mid-bass
+      const punchBoost = db * 0.4; // Bass punch
+      
+      subBass.gain.value = subBoost;
+      midBass.gain.value = midBoost;
+      bassPunch.gain.value = punchBoost;
+      compressor.threshold.value = -18; // Normal compression
+      compressor.knee.value = 20; // Normal knee
+      compressor.ratio.value = 6; // Normal ratio
+      compressor.attack.value = 0.001; // Normal attack
+      compressor.release.value = 0.1; // Normal release
     }
   }
-  function setTreble(db){ highShelf.gain.value = db; }
-  function setGain(db){ preGain.gain.value = Math.pow(10, db/20); }
   function setVol(v){ masterGain.gain.value = v; }
   
   // Initialize controls
   setBass(parseFloat(bassCtl.value));
-  setTreble(parseFloat(trebleCtl.value));
-  setGain(parseFloat(gainCtl.value));
   setVol(parseFloat(volCtl.value));
 
   // Controls
@@ -343,26 +352,19 @@
     playTrack(prevIndex);
   });
 
-  nextBtn.addEventListener('click', () => {
-    nextTrack();
-  });
+  nextBtn.addEventListener('click', nextTrack);
   // Value display elements
   const bassValue = $('#bassValue');
-  const trebleValue = $('#trebleValue');
-  const gainValue = $('#gainValue');
   const volValue = $('#volValue');
   
   bassCtl.oninput = e => {
-    setBass(parseFloat(e.target.value));
-    bassValue.textContent = `${e.target.value}dB`;
-  };
-  trebleCtl.oninput = e => {
-    setTreble(parseFloat(e.target.value));
-    trebleValue.textContent = `${e.target.value}dB`;
-  };
-  gainCtl.oninput = e => {
-    setGain(parseFloat(e.target.value));
-    gainValue.textContent = `${e.target.value}dB`;
+    const value = parseFloat(e.target.value);
+    setBass(value);
+    if (value >= 11) {
+      bassValue.textContent = 'AEROBASS';
+    } else {
+      bassValue.textContent = `${value}dB`;
+    }
   };
   volCtl.oninput = e => {
     setVol(parseFloat(e.target.value));
@@ -396,13 +398,11 @@
       // Update the corresponding function
       if (target === 'bass') {
         setBass(newValue);
-        valueDisplay.textContent = `${newValue}dB`;
-      } else if (target === 'treble') {
-        setTreble(newValue);
-        valueDisplay.textContent = `${newValue}dB`;
-      } else if (target === 'gain') {
-        setGain(newValue);
-        valueDisplay.textContent = `${newValue}dB`;
+        if (newValue >= 11) {
+          valueDisplay.textContent = 'AEROBASS';
+        } else {
+          valueDisplay.textContent = `${newValue}dB`;
+        }
       } else if (target === 'vol') {
         setVol(newValue);
         valueDisplay.textContent = `${Math.round(newValue * 100)}%`;
@@ -736,7 +736,6 @@
   const seekFillM = document.getElementById('seekFillMobile');
   const timeM = document.getElementById('timeMobile');
   const bassM = document.getElementById('bassMobile');
-  const trebleM = document.getElementById('trebleMobile');
   const volM  = document.getElementById('volMobile');
   const nowTitle = document.getElementById('nowTitle');
 
@@ -763,24 +762,15 @@
       if(isFinite(audio.duration)) audio.currentTime = Math.max(0, Math.min(1,p)) * audio.duration;
     });
   }
+  // Mobile EQ controls
   if(bassM){ bassM.oninput = e => { setBass(parseFloat(e.target.value)); bassCtl.value = e.target.value; }; }
-  if(trebleM){ trebleM.oninput = e => { setTreble(parseFloat(e.target.value)); trebleCtl.value = e.target.value; }; }
-  if(volM){ volM.oninput  = e => { setVol(parseFloat(e.target.value)); volCtl.value = e.target.value; }; }
+  if(volM){ volM.oninput = e => { setVol(parseFloat(e.target.value)); volCtl.value = e.target.value; }; }
 
   audio.addEventListener('timeupdate', syncMobile);
 
-  // update title when loading tracks
-  document.querySelectorAll('button[data-load]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      nowTitle && (nowTitle.textContent = btn.dataset.load);
-      if(playM) playM.textContent='❚❚ Pause';
-    });
-  });
-
-  // Playlist functionality
+  // Playlist functionality - simplified
   let currentTrackIndex = 0;
   
-  // Track data - using GitHub raw URLs
   const tracks = [
     { name: "Get Bonzied (Cut-Down)", src: "https://raw.githubusercontent.com/aerovista-us/bonsaid/main/%E2%80%9CGet%20Bonzied%20(Cut-Down%20Version).mp3" },
     { name: "GET BONSAID – Ext. Growth", src: "https://raw.githubusercontent.com/aerovista-us/bonsaid/main/GET%20BONSAID%20%E2%80%93%20Ext.%20Growth.mp3" },
@@ -790,9 +780,11 @@
   ];
 
   function updateTrackDisplay() {
-    document.querySelectorAll('.track').forEach(track => track.classList.remove('playing', 'queued'));
+    document.querySelectorAll('.track').forEach(track => track.classList.remove('playing'));
     const currentTrack = document.querySelector(`[data-track="${currentTrackIndex}"]`);
-    if(currentTrack) currentTrack.classList.add('playing');
+    if(currentTrack) {
+      currentTrack.classList.add('playing');
+    }
   }
 
   function playTrack(index) {
@@ -800,11 +792,11 @@
       currentTrackIndex = index;
       const track = tracks[index];
       audio.src = track.src;
-      audio.play();
       playBtn.textContent = '❚❚ Pause';
       if(playM) playM.textContent = '❚❚ Pause';
       if(nowTitle) nowTitle.textContent = track.name;
       updateTrackDisplay();
+      audio.play();
     }
   }
 
@@ -814,35 +806,23 @@
   }
 
   // Auto-advance to next track
-  audio.addEventListener('ended', () => {
-    nextTrack();
-  });
+  audio.addEventListener('ended', nextTrack);
 
-  // Preload first track on page load
-  function preloadFirstTrack() {
-    if(tracks.length > 0) {
-      audio.src = tracks[0].src;
-      if(nowTitle) nowTitle.textContent = tracks[0].name;
-      updateTrackDisplay();
-      updateLoadedTrack();
-    }
+  // Initialize first track
+  if(tracks.length > 0) {
+    audio.src = tracks[0].src;
+    if(nowTitle) nowTitle.textContent = tracks[0].name;
+    updateTrackDisplay();
   }
 
-  // Initialize first track when page loads
-  preloadFirstTrack();
-
-  // Add visual indicator for loaded track
-  function updateLoadedTrack() {
-    document.querySelectorAll('.track').forEach(track => {
-      track.classList.remove('loaded');
-    });
-    const currentTrack = document.querySelector(`[data-track="${currentTrackIndex}"]`);
-    if(currentTrack) currentTrack.classList.add('loaded');
-  }
-
-  // Track loading - simplified showcase mode
+  // Track button handlers - prevent lockup by ensuring audio context is ready
   document.querySelectorAll('button[data-load]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      // Ensure audio context is resumed before playing
+      if (ctx.state === 'suspended') {
+        await ctx.resume();
+      }
       const trackElement = btn.closest('.track');
       const trackIndex = parseInt(trackElement.dataset.track);
       playTrack(trackIndex);
@@ -860,17 +840,17 @@
   
   // All images from slideshow directory
   const slideshowImages = [
-    { src: 'slideshow/A sleek bonsai tree .png', badge: 'Bonsai Tree' },
-    { src: 'slideshow/A sleek bonsai tree_no.bg .png', badge: 'Bonsai Tree (No BG)' },
-    { src: 'slideshow/b94d7e21-7ddc-42cc-97fd-6cf2f2a15882.png', badge: 'Album Art' },
-    { src: 'slideshow/claypot.jpeg', badge: 'Clay Pot' },
-    { src: 'slideshow/cracked pot.jpeg', badge: 'Cracked Pot' },
-    { src: 'slideshow/d8c1b8ae-a197-4299-bb7b-6c24ea68df53.png', badge: 'Album Art 2' },
-    { src: 'slideshow/dowzznload.jpeg', badge: 'Download' },
-    { src: 'slideshow/rootbust.png', badge: 'Root Bust' },
-    { src: 'slideshow/Trim mad.png', badge: 'Trim Mad' },
-    { src: 'slideshow/trim.png', badge: 'Trim' },
-    { src: 'slideshow/watered.png', badge: 'Watered' }
+    'slideshow/A sleek bonsai tree .png',
+    'slideshow/A sleek bonsai tree_no.bg .png',
+    'slideshow/yellow.png',
+    'slideshow/claypot.jpeg',
+    'slideshow/cracked pot.jpeg',
+    'slideshow/table.png',
+    'slideshow/dowzznload.jpeg',
+    'slideshow/rootbust.png',
+    'slideshow/Trim mad.png',
+    'slideshow/trim.png',
+    'slideshow/watered.png'
   ];
   
   // Randomize images on page load
@@ -892,17 +872,12 @@
     indicators.innerHTML = '';
     
     // Create slides dynamically
-    randomizedImages.forEach((image, index) => {
+    randomizedImages.forEach((imageSrc, index) => {
       const slide = document.createElement('div');
       slide.className = 'slide';
       if (index === 0) slide.classList.add('active');
-      slide.style.backgroundImage = `url('${image.src}')`;
+      slide.style.backgroundImage = `url('${imageSrc}')`;
       slide.setAttribute('data-track', index);
-      
-      const badge = document.createElement('span');
-      badge.className = 'badge';
-      badge.textContent = image.badge;
-      slide.appendChild(badge);
       
       slideshowContainer.appendChild(slide);
     });
