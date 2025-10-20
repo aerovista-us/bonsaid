@@ -85,7 +85,18 @@
   .sticky-player .row{display:flex;align-items:center;gap:10px}
   .sticky-player .seek{flex:1;height:8px;background:#0f0f0f;border-radius:999px;border:1px solid #2a2a2a;position:relative}
   .sticky-player .seek .fill{position:absolute;inset:0 100% 0 0;background:linear-gradient(90deg,#2f6c46,#7bd0a0);border-radius:inherit}
-  .sticky-player .title{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:30vw}
+    .sticky-player .title{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:30vw}
+
+    /* Store Section */
+    .store-section{background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 50%,#1a1a1a 100%);padding:40px 0;border-top:1px solid #333}
+    .store-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;max-width:1200px;margin:0 auto;padding:0 20px}
+    .store-item{background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+    .store-item:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.4);border-color:var(--gold)}
+    .product-image{margin-bottom:16px;border-radius:8px;overflow:hidden}
+    .store-item h3{color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600}
+    .price{color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 16px}
+    .buy-btn{background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px}
+    .buy-btn:hover{background:linear-gradient(135deg,#ffd700,#ffa500);transform:scale(1.05);box-shadow:0 4px 12px rgba(255,215,0,0.3)}
 
   @media (max-width: 980px){
     body{padding-bottom:200px} /* Increased to accommodate taller visualizer */
@@ -234,6 +245,68 @@
       <input id="volMobile" type="range" min="0" max="1" value="0.9" step="0.01" style="width:100px;height:48px;background:transparent;cursor:pointer;outline:none"/>
     </div>
   </div>
+
+  <!-- Store Section -->
+  <section class="store-section">
+    <div class="wrap">
+      <h2 style="text-align:center;margin:40px 0 30px;color:var(--gold);font-size:28px">BONSAID Store</h2>
+      <div class="store-grid">
+        <div class="store-item">
+          <div class="product-image">
+            <img src="bonsaid-hyper-vector.svg" alt="BONSAID T-Shirt" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          </div>
+          <h3>BONSAID T-Shirt</h3>
+          <p class="price">$25.00</p>
+          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
+        </div>
+        
+        <div class="store-item">
+          <div class="product-image">
+            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Mug" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          </div>
+          <h3>BONSAID Mug</h3>
+          <p class="price">$20.00</p>
+          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
+        </div>
+        
+        <div class="store-item">
+          <div class="product-image">
+            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Stickers" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          </div>
+          <h3>BONSAID Sticker Pack</h3>
+          <p class="price">$12.00</p>
+          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
+        </div>
+        
+        <div class="store-item">
+          <div class="product-image">
+            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Phone Case" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          </div>
+          <h3>BONSAID Phone Case</h3>
+          <p class="price">$18.00</p>
+          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
+        </div>
+        
+        <div class="store-item">
+          <div class="product-image">
+            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Poster" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          </div>
+          <h3>BONSAID Poster</h3>
+          <p class="price">$15.00</p>
+          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
+        </div>
+        
+        <div class="store-item">
+          <div class="product-image">
+            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Hoodie" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          </div>
+          <h3>BONSAID Hoodie</h3>
+          <p class="price">$45.00</p>
+          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <footer>© <span id="yr"></span> AeroVista · BONSAID — All rights reserved.</footer>
 

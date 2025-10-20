@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200">
+  <defs>
+    <!-- Rock texture gradient -->
+    <linearGradient id="rockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B7355;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A0522D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Moss gradient -->
+    <radialGradient id="mossGradient" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" style="stop-color:#4A7C59;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#2D5016;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a3a0a;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Trunk gradient -->
+    <linearGradient id="trunkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8B4513" />
+      <stop offset="30%" style="stop-color:#A0522D" />
+      <stop offset="70%" style="stop-color:#8B4513" />
+      <stop offset="100%" style="stop-color:#654321" />
+    </linearGradient>
+    
+    <!-- Foliage gradient -->
+    <radialGradient id="foliageGradient" cx="50%" cy="40%" r="80%">
+      <stop offset="0%" style="stop-color:#7DCB9A" />
+      <stop offset="40%" style="stop-color:#4A7C59" />
+      <stop offset="80%" style="stop-color:#2D5016" />
+      <stop offset="100%" style="stop-color:#1a3a0a" />
+    </radialGradient>
+    
+    <!-- Gold text gradient -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD700" />
+      <stop offset="30%" style="stop-color:#FFA500" />
+      <stop offset="70%" style="stop-color:#DAA520" />
+      <stop offset="100%" style="stop-color:#B8860B" />
+    </linearGradient>
+    
+    <!-- Text shadow -->
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="1200" fill="#2C1810"/>
+  
+  <!-- Main rock formation -->
+  <g id="rockFormation">
+    <!-- Left pillar -->
+    <path d="M150,200 L200,150 L220,200 L200,400 L180,400 Z" fill="url(#rockGradient)" stroke="#654321" stroke-width="2"/>
+    
+    <!-- Main base -->
+    <path d="M100,400 L700,400 L720,450 L700,500 L100,500 L80,450 Z" fill="url(#rockGradient)" stroke="#654321" stroke-width="2"/>
+    
+    <!-- Rock texture lines -->
+    <path d="M180,250 Q200,280 220,300" stroke="#654321" stroke-width="1" fill="none" opacity="0.6"/>
+    <path d="M200,300 Q220,320 240,340" stroke="#654321" stroke-width="1" fill="none" opacity="0.6"/>
+    <path d="M300,420 Q350,440 400,450" stroke="#654321" stroke-width="1" fill="none" opacity="0.4"/>
+    <path d="M500,430 Q550,450 600,460" stroke="#654321" stroke-width="1" fill="none" opacity="0.4"/>
+  </g>
+  
+  <!-- Moss covering -->
+  <g id="moss" opacity="0.8">
+    <!-- Left pillar moss -->
+    <ellipse cx="190" cy="300" rx="25" ry="15" fill="url(#mossGradient)"/>
+    <ellipse cx="185" cy="320" rx="20" ry="12" fill="url(#mossGradient)"/>
+    <ellipse cx="195" cy="340" rx="18" ry="10" fill="url(#mossGradient)"/>
+    
+    <!-- Base moss patches -->
+    <ellipse cx="200" cy="450" rx="40" ry="20" fill="url(#mossGradient)"/>
+    <ellipse cx="300" cy="460" rx="35" ry="18" fill="url(#mossGradient)"/>
+    <ellipse cx="400" cy="455" rx="30" ry="15" fill="url(#mossGradient)"/>
+    <ellipse cx="500" cy="465" rx="35" ry="17" fill="url(#mossGradient)"/>
+    <ellipse cx="600" cy="460" rx="32" ry="16" fill="url(#mossGradient)"/>
+  </g>
+  
+  <!-- Bonsai tree trunk -->
+  <g id="trunk">
+    <!-- Main trunk -->
+    <path d="M400,500 Q380,400 360,300 Q340,200 320,150 Q340,100 360,80 Q380,60 400,50" 
+          stroke="url(#trunkGradient)" stroke-width="25" fill="none" stroke-linecap="round"/>
+    
+    <!-- Trunk texture -->
+    <path d="M370,200 Q375,220 380,240" stroke="#654321" stroke-width="3" fill="none" opacity="0.7"/>
+    <path d="M375,250 Q380,270 385,290" stroke="#654321" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M365,300 Q360,320 355,340" stroke="#654321" stroke-width="2" fill="none" opacity="0.6"/>
+    
+    <!-- Main branches -->
+    <path d="M360,200 Q320,180 280,160" stroke="url(#trunkGradient)" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M360,200 Q400,180 440,160" stroke="url(#trunkGradient)" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M340,150 Q300,130 260,110" stroke="url(#trunkGradient)" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M340,150 Q380,130 420,110" stroke="url(#trunkGradient)" stroke-width="8" fill="none" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Foliage pads -->
+  <g id="foliage">
+    <!-- Left side foliage -->
+    <ellipse cx="280" cy="160" rx="35" ry="25" fill="url(#foliageGradient)"/>
+    <ellipse cx="260" cy="110" rx="30" ry="20" fill="url(#foliageGradient)"/>
+    <ellipse cx="320" cy="180" rx="40" ry="28" fill="url(#foliageGradient)"/>
+    
+    <!-- Right side foliage -->
+    <ellipse cx="440" cy="160" rx="32" ry="22" fill="url(#foliageGradient)"/>
+    <ellipse cx="420" cy="110" rx="28" ry="18" fill="url(#foliageGradient)"/>
+    <ellipse cx="480" cy="140" rx="25" ry="16" fill="url(#foliageGradient)"/>
+    
+    <!-- Top foliage -->
+    <ellipse cx="400" cy="50" rx="45" ry="30" fill="url(#foliageGradient)"/>
+    <ellipse cx="380" cy="30" rx="35" ry="22" fill="url(#foliageGradient)"/>
+    <ellipse cx="420" cy="35" rx="30" ry="18" fill="url(#foliageGradient)"/>
+    
+    <!-- Foliage texture details -->
+    <circle cx="270" cy="155" r="2" fill="#7DCB9A" opacity="0.8"/>
+    <circle cx="290" cy="165" r="1.5" fill="#7DCB9A" opacity="0.7"/>
+    <circle cx="430" cy="155" r="2" fill="#7DCB9A" opacity="0.8"/>
+    <circle cx="450" cy="145" r="1.5" fill="#7DCB9A" opacity="0.7"/>
+    <circle cx="390" cy="45" r="2.5" fill="#7DCB9A" opacity="0.9"/>
+  </g>
+  
+  <!-- BONSAID text -->
+  <text x="400" y="480" font-family="serif" font-size="48" font-weight="bold" 
+        text-anchor="middle" fill="url(#goldGradient)" filter="url(#textShadow)">
+    BONSAID
+  </text>
+  
+  <!-- Additional text effects -->
+  <text x="400" y="480" font-family="serif" font-size="48" font-weight="bold" 
+        text-anchor="middle" fill="none" stroke="#B8860B" stroke-width="1" opacity="0.3">
+    BONSAID
+  </text>
+</svg>
