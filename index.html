@@ -95,8 +95,11 @@
     .product-image{margin-bottom:16px;border-radius:8px;overflow:hidden}
     .store-item h3{color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600}
     .price{color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 16px}
-    .buy-btn{background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px}
-    .buy-btn:hover{background:linear-gradient(135deg,#ffd700,#ffa500);transform:scale(1.05);box-shadow:0 4px 12px rgba(255,215,0,0.3)}
+    .add-to-cart-btn{background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px}
+    .add-to-cart-btn:hover{background:linear-gradient(135deg,#ffd700,#ffa500);transform:scale(1.05);box-shadow:0 4px 12px rgba(255,215,0,0.3)}
+    .add-to-cart-btn:disabled{background:#666;cursor:not-allowed;transform:none;box-shadow:none}
+    .checkout-btn{background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:16px;text-transform:uppercase;letter-spacing:0.5px}
+    .checkout-btn:hover{background:linear-gradient(135deg,#ffd700,#ffa500);transform:scale(1.05);box-shadow:0 4px 12px rgba(255,215,0,0.3)}
 
   @media (max-width: 980px){
     body{padding-bottom:200px} /* Increased to accommodate taller visualizer */
@@ -250,59 +253,37 @@
   <section class="store-section">
     <div class="wrap">
       <h2 style="text-align:center;margin:40px 0 30px;color:var(--gold);font-size:28px">BONSAID Store</h2>
-      <div class="store-grid">
-        <div class="store-item">
-          <div class="product-image">
-            <img src="bonsaid-hyper-vector.svg" alt="BONSAID T-Shirt" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
-          </div>
-          <h3>BONSAID T-Shirt</h3>
-          <p class="price">$25.00</p>
-          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
+      
+      <!-- Cart Summary -->
+      <div class="cart-summary" id="cartSummary" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:20px;margin-bottom:30px;text-align:center">
+        <h3 style="color:var(--gold);margin:0 0 15px">Your Cart</h3>
+        <div id="cartItems"></div>
+        <div class="cart-total" style="margin-top:15px;padding-top:15px;border-top:1px solid #333">
+          <strong style="color:var(--ink);font-size:18px">Total: $<span id="cartTotal">0.00</span></strong>
         </div>
-        
-        <div class="store-item">
+        <button class="checkout-btn" id="checkoutBtn" style="background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:15px;font-size:16px">
+          Proceed to Checkout
+        </button>
+      </div>
+      
+      <div class="store-grid" style="justify-content:center">
+        <div class="store-item" style="max-width:400px">
           <div class="product-image">
-            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Mug" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
-          </div>
-          <h3>BONSAID Mug</h3>
-          <p class="price">$20.00</p>
-          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
-        </div>
-        
-        <div class="store-item">
-          <div class="product-image">
-            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Stickers" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+            <img src="bonsaid-hyper - Copy.png" alt="BONSAID Stickers" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
           </div>
           <h3>BONSAID Sticker Pack</h3>
-          <p class="price">$12.00</p>
-          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
-        </div>
-        
-        <div class="store-item">
-          <div class="product-image">
-            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Phone Case" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          <div class="size-options" style="margin:15px 0">
+            <div class="size-option" style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#0a0a0a;border-radius:6px;margin-bottom:8px">
+              <span style="color:var(--ink)">3" x 3"</span>
+              <span style="color:var(--gold);font-weight:bold">$5.50</span>
+              <button class="add-to-cart-btn" data-product="stickers-3x3" data-name="BONSAID Stickers (3x3)" data-price="5.50" style="padding:6px 12px;font-size:12px">Add</button>
+            </div>
+            <div class="size-option" style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#0a0a0a;border-radius:6px">
+              <span style="color:var(--ink)">5.5" x 5.5"</span>
+              <span style="color:var(--gold);font-weight:bold">$7.50</span>
+              <button class="add-to-cart-btn" data-product="stickers-5x5" data-name="BONSAID Stickers (5.5x5.5)" data-price="7.50" style="padding:6px 12px;font-size:12px">Add</button>
+            </div>
           </div>
-          <h3>BONSAID Phone Case</h3>
-          <p class="price">$18.00</p>
-          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
-        </div>
-        
-        <div class="store-item">
-          <div class="product-image">
-            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Poster" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
-          </div>
-          <h3>BONSAID Poster</h3>
-          <p class="price">$15.00</p>
-          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
-        </div>
-        
-        <div class="store-item">
-          <div class="product-image">
-            <img src="bonsaid-hyper-vector.svg" alt="BONSAID Hoodie" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
-          </div>
-          <h3>BONSAID Hoodie</h3>
-          <p class="price">$45.00</p>
-          <button class="buy-btn" onclick="window.open('https://printful.com', '_blank')">Buy Now</button>
         </div>
       </div>
     </div>
@@ -310,6 +291,7 @@
 
   <footer>© <span id="yr"></span> AeroVista · BONSAID — All rights reserved.</footer>
 
+<script src="store-config.js"></script>
 <script>
 (() => {
   const $ = s => document.querySelector(s);
