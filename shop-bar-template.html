@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Bar Template</title>
+  <style>
+    :root{
+      --bg:#0d0d0d; --panel:#141414; --ink:#e9e5da; --muted:#a89f8b; --gold:#d1a85a; --accent:#8ccf9e; --emerald:#5ac29a; --danger:#ff6b6b;
+    }
+    
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,Inter,Arial}
+    
+    /* Shop Bar Styles */
+    .shop-bar-section {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+      padding: 40px 0;
+      border-top: 1px solid #333;
+      margin-top: 40px;
+      overflow: hidden;
+    }
+    
+    .infinite-scroll-container {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .infinite-scroll-track {
+      display: flex;
+      animation: scroll-left 60s linear infinite;
+      width: fit-content;
+    }
+    
+    .shop-item {
+      width: 280px;
+      height: 420px;
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: 0 15px;
+    }
+    
+    .product-image {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .product-gallery {
+      width: 100%;
+      height: 200px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .gallery-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    .gallery-image.active {
+      opacity: 1;
+    }
+    
+    .product-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 15px 0;
+    }
+    
+    .product-title {
+      color: var(--ink);
+      font-size: 18px;
+      margin: 0 0 8px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    
+    .product-price {
+      color: var(--gold);
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0 0 8px;
+    }
+    
+    .product-description {
+      color: #888;
+      font-size: 14px;
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+    
+    .learn-more-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold), #b8941f);
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+    
+    .learn-more-btn:hover {
+      background: linear-gradient(135deg, #ffd700, #ffa500);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(255,215,0,0.3);
+    }
+    
+    /* Modal Styles */
+    .product-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .product-modal.show {
+      display: flex;
+      opacity: 1;
+    }
+    
+    .modal-content {
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    
+    .close-modal:hover {
+      color: var(--gold);
+    }
+    
+    .modal-image {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      background: #1a1a1a;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .modal-title {
+      color: var(--ink);
+      font-size: 24px;
+      margin: 0 0 10px;
+      font-weight: 600;
+    }
+    
+    .modal-price {
+      color: var(--gold);
+      font-size: 22px;
+      font-weight: bold;
+      margin: 0 0 15px;
+    }
+    
+    .modal-description {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+      margin: 0 0 20px;
+    }
+    
+    .modal-features {
+      margin: 0 0 20px;
+    }
+    
+    .modal-features h4 {
+      color: var(--ink);
+      font-size: 18px;
+      margin: 0 0 10px;
+    }
+    
+    .modal-features ul {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+      padding-left: 20px;
+    }
+    
+    .buy-now-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold), #b8941f);
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .buy-now-btn:hover {
+      background: linear-gradient(135deg, #ffd700, #ffa500);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(255,215,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- Shop Bar Section -->
+  <section class="shop-bar-section">
+    <div class="infinite-scroll-container">
+      <div class="infinite-scroll-track" id="infiniteScrollTrack">
+        <!-- Products will be populated by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Modal -->
+  <div id="productModal" class="product-modal">
+    <div class="modal-content">
+      <button class="close-modal" id="closeModal">&times;</button>
+      <img id="modalImage" class="modal-image" alt="Product Image">
+      <h2 id="modalTitle" class="modal-title"></h2>
+      <p id="modalPrice" class="modal-price"></p>
+      <p id="modalDescription" class="modal-description"></p>
+      <div id="modalFeatures" class="modal-features"></div>
+      <button id="buyNowBtn" class="buy-now-btn">Buy Now</button>
+    </div>
+  </div>
+
+  <script>
+    // Product Configuration - CUSTOMIZE THIS FOR YOUR SITE
+    const productInfo = {
+      "product-1": {
+        name: "Your Product Name",
+        price: "$XX.XX",
+        description: "Your product description here. Explain what makes this product special and why customers should buy it.",
+        features: [
+          "Feature 1 - Highlight key benefits",
+          "Feature 2 - What makes it unique", 
+          "Feature 3 - Quality or material details",
+          "Feature 4 - Size or customization options"
+        ],
+        image: "path/to/your/product-image.png",
+        paymentLink: "https://your-payment-link.com"
+      },
+      "product-2": {
+        name: "Another Product",
+        price: "$XX.XX - $XX.XX",
+        description: "Another great product description that showcases your merchandise.",
+        features: [
+          "Premium quality materials",
+          "Multiple color options",
+          "Custom sizing available",
+          "Fast shipping included"
+        ],
+        image: "path/to/your/another-product.png",
+        paymentLink: "https://your-another-payment-link.com"
+      }
+      // Add more products as needed
+    };
+
+    // Initialize infinite scroll
+    function initInfiniteScroll() {
+      const scrollTrack = document.getElementById('infiniteScrollTrack');
+      
+      // Create product HTML
+      let productsHTML = '';
+      Object.keys(productInfo).forEach(productId => {
+        const product = productInfo[productId];
+        productsHTML += `
+          <div class="shop-item">
+            <div class="product-image">
+              <div class="product-gallery">
+                <img src="${product.image}" alt="${product.name}" class="gallery-image active">
+              </div>
+            </div>
+            <div class="product-info">
+              <div>
+                <h3 class="product-title">${product.name}</h3>
+                <p class="product-price">${product.price}</p>
+                <p class="product-description">Click to learn more</p>
+                <p class="product-description">&nbsp;</p>
+              </div>
+              <button class="learn-more-btn" data-product="${productId}">Learn More</button>
+            </div>
+          </div>
+        `;
+      });
+      
+      // Duplicate for infinite scroll
+      scrollTrack.innerHTML = productsHTML + productsHTML;
+      
+      // Add event listeners
+      scrollTrack.querySelectorAll('.learn-more-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const productId = this.getAttribute('data-product');
+          openProductModal(productId);
+        });
+      });
+    }
+
+    // Modal functions
+    function openProductModal(productId) {
+      const product = productInfo[productId];
+      if (!product) return;
+      
+      document.getElementById('modalImage').src = product.image;
+      document.getElementById('modalTitle').textContent = product.name;
+      document.getElementById('modalPrice').textContent = product.price;
+      document.getElementById('modalDescription').textContent = product.description;
+      
+      const featuresList = product.features.map(feature => `<li>${feature}</li>`).join('');
+      document.getElementById('modalFeatures').innerHTML = `
+        <h4>Features:</h4>
+        <ul>${featuresList}</ul>
+      `;
+      
+      document.getElementById('buyNowBtn').onclick = () => {
+        window.open(product.paymentLink, '_blank');
+      };
+      
+      document.getElementById('productModal').classList.add('show');
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').classList.remove('show');
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      initInfiniteScroll();
+      
+      document.getElementById('closeModal').addEventListener('click', closeProductModal);
+      
+      document.getElementById('productModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeProductModal();
+        }
+      });
+      
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeProductModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
