@@ -9,6 +9,11 @@
     :root{
       --bg:#0d0d0d; --panel:#141414; --ink:#e9e5da; --muted:#a89f8b; --gold:#d1a85a; --accent:#8ccf9e; --emerald:#5ac29a; --danger:#ff6b6b;
     }
+    
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
     *{box-sizing:border-box}
     body{margin:0;background:url('bg.png') center/cover fixed, radial-gradient(60% 100% at 50% 0%, #162012, #0b0b0b 50%) fixed;color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,Inter,Arial}
     a{color:var(--gold)}
@@ -85,7 +90,21 @@
   .sticky-player .row{display:flex;align-items:center;gap:10px}
   .sticky-player .seek{flex:1;height:8px;background:#0f0f0f;border-radius:999px;border:1px solid #2a2a2a;position:relative}
   .sticky-player .seek .fill{position:absolute;inset:0 100% 0 0;background:linear-gradient(90deg,#2f6c46,#7bd0a0);border-radius:inherit}
-  .sticky-player .title{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:30vw}
+    .sticky-player .title{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:30vw}
+
+    /* Store Section */
+    .store-section{background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 50%,#1a1a1a 100%);padding:40px 0;border-top:1px solid #333}
+    .store-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;max-width:1200px;margin:0 auto;padding:0 20px}
+    .store-item{background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+    .store-item:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.4);border-color:var(--gold)}
+    .product-image{margin-bottom:16px;border-radius:8px;overflow:hidden}
+    .store-item h3{color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600}
+    .price{color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 16px}
+    .add-to-cart-btn{background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px}
+    .add-to-cart-btn:hover{background:linear-gradient(135deg,#ffd700,#ffa500);transform:scale(1.05);box-shadow:0 4px 12px rgba(255,215,0,0.3)}
+    .add-to-cart-btn:disabled{background:#666;cursor:not-allowed;transform:none;box-shadow:none}
+    .checkout-btn{background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:16px;text-transform:uppercase;letter-spacing:0.5px}
+    .checkout-btn:hover{background:linear-gradient(135deg,#ffd700,#ffa500);transform:scale(1.05);box-shadow:0 4px 12px rgba(255,215,0,0.3)}
 
   @media (max-width: 980px){
     body{padding-bottom:200px} /* Increased to accommodate taller visualizer */
@@ -235,70 +254,132 @@
     </div>
   </div>
 
-  <!-- BONSAID Store Section -->
-  <section class="store-section" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 50%,#1a1a1a 100%);padding:40px 0;border-top:1px solid #333;margin-top:40px">
-    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
-      <h2 style="text-align:center;color:var(--gold);font-size:32px;margin-bottom:8px;letter-spacing:0.05em">BONSAID Store</h2>
-      <p style="text-align:center;color:var(--muted);margin-bottom:40px;font-size:16px">Music & Merchandise</p>
-      
-      <!-- Cart Summary (initially hidden) -->
-      <div id="cartSummary" style="display:none;background:#0a0a0a;border:1px solid #333;border-radius:12px;padding:20px;margin-bottom:30px">
-        <h3 style="color:var(--gold);margin:0 0 15px;font-size:18px">Your Cart</h3>
-        <div id="cartItems"></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:15px;padding-top:15px;border-top:1px solid #333">
-          <strong style="color:var(--ink)">Total: $<span id="cartTotal">0.00</span></strong>
-          <button class="checkout-btn" id="checkoutBtn" style="background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:15px;font-size:16px">
-            Proceed to Checkout
-          </button>
-        </div>
+  <!-- Store Section -->
+  <section class="store-section" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 50%,#1a1a1a 100%);padding:40px 0;border-top:1px solid #333;margin-top:40px;overflow:hidden">
+    <div class="infinite-scroll-container" style="width:100%;overflow:hidden;position:relative">
+      <div class="infinite-scroll-track" id="infiniteScrollTrack" style="display:flex;animation:scroll-left 60s linear infinite;width:fit-content">
+        <!-- Products will be duplicated here for infinite scroll -->
       </div>
-      
-      <div class="store-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;max-width:1200px;margin:0 auto;padding:0 20px">
-        <div class="store-item" style="background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
-          <div class="product-image" style="margin-bottom:16px;border-radius:8px;overflow:hidden">
-            <img src="bonsaid-hyper - Copy.png" alt="BONSAID Stickers" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+    </div>
+    
+    <!-- Cart Summary (hidden by default) -->
+    <div class="cart-summary" id="cartSummary" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:20px;margin:30px auto;text-align:center;max-width:600px">
+      <h3 style="color:var(--gold);margin:0 0 15px">Your Cart</h3>
+      <div id="cartItems"></div>
+      <div class="cart-total" style="margin-top:15px;padding-top:15px;border-top:1px solid #333">
+        <strong style="color:var(--ink);font-size:18px">Total: $<span id="cartTotal">0.00</span></strong>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn" style="background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:15px;font-size:16px">
+        Proceed to Checkout
+      </button>
+    </div>
+    
+    <div class="store-grid" style="display:none">
+        <div class="store-item" style="width:280px;height:420px;background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:flex;flex-direction:column;justify-content:space-between;margin:0 15px">
+          <div class="product-image" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+            <div class="product-gallery" style="width:100%;height:200px;background:#1a1a1a;border-radius:8px;padding:20px;position:relative;overflow:hidden">
+              <img src="products/bstick/kiss-cut-stickers-white-3x3-default-68f8540cbd5e3.png" alt="BONSAID Stickers" class="gallery-image active" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:1;transition:opacity 0.5s ease">
+              <img src="products/bstick/kiss-cut-stickers-white-3x3-lifestyle-1-68f8540cbda96.png" alt="BONSAID Stickers Lifestyle" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+              <img src="products/bstick/kiss-cut-stickers-white-3x3-lifestyle-2-68f8540cbde78.png" alt="BONSAID Stickers Lifestyle" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+            </div>
           </div>
-          <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600">BONSAID Sticker Pack</h3>
-          <div class="size-options" style="margin:15px 0">
-            <div class="size-option" style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#0a0a0a;border-radius:6px;margin-bottom:8px">
-              <span style="color:var(--ink)">3" x 3"</span>
-              <span style="color:var(--gold);font-weight:bold">$5.50</span>
-              <button class="add-to-cart-btn" data-product="stickers-3x3" data-name="BONSAID Stickers (3x3)" data-price="5.50" style="padding:6px 12px;font-size:12px;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;border-radius:4px;cursor:pointer">Add</button>
+          <div class="product-info" style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:15px 0">
+            <div>
+              <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600;line-height:1.2">BONSAID Sticker Pack</h3>
+              <p class="price" style="color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 8px">$5.50 - $7.50</p>
+              <p style="color:#888;font-size:14px;margin:0 0 8px;line-height:1.3">Multiple sizes available</p>
+              <p style="color:#888;font-size:14px;margin:0;line-height:1.3">&nbsp;</p>
             </div>
-            <div class="size-option" style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#0a0a0a;border-radius:6px">
-              <span style="color:var(--ink)">5.5" x 5.5"</span>
-              <span style="color:var(--gold);font-weight:bold">$7.50</span>
-              <button class="add-to-cart-btn" data-product="stickers-5x5" data-name="BONSAID Stickers (5.5x5.5)" data-price="7.50" style="padding:6px 12px;font-size:12px;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;border-radius:4px;cursor:pointer">Add</button>
-            </div>
+            <button class="learn-more-btn" data-product="stickers" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;margin-top:auto">Learn More</button>
           </div>
         </div>
         
-        <div class="store-item" style="background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
-          <div class="product-image" style="margin-bottom:16px;border-radius:8px;overflow:hidden">
-            <img src="bonsaid-hyper - Copy.png" alt="BONSAID Rooted Resilience Oversized Heavyweight" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+        <div class="store-item" style="width:280px;height:420px;background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:flex;flex-direction:column;justify-content:space-between;margin:0 15px">
+          <div class="product-image" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+            <div class="product-gallery" style="width:100%;height:200px;background:#1a1a1a;border-radius:8px;padding:20px;position:relative;overflow:hidden">
+              <img src="products/heavyhoodie/unisex-oversized-heavyweight-hoodie-black-front-68f8516e21ce8.png" alt="BONSAID Heavyweight Hoodie" class="gallery-image active" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:1;transition:opacity 0.5s ease">
+              <img src="products/heavyhoodie/unisex-oversized-heavyweight-hoodie-white-front-68f8516e219cc.png" alt="BONSAID Heavyweight Hoodie White" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+              <img src="products/heavyhoodie/unisex-oversized-heavyweight-hoodie-forest-front-68f8516e2174b.png" alt="BONSAID Heavyweight Hoodie Forest" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+              <img src="products/heavyhoodie/unisex-oversized-heavyweight-hoodie-vintage-brown-front-68f8516e2191f.png" alt="BONSAID Heavyweight Hoodie Brown" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+            </div>
           </div>
-          <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600">BONSAID "Rooted Resilience" Oversized Heavyweight</h3>
-          <p style="color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 8px">$58.00 - $64.00</p>
-          <p style="color:#888;font-size:14px;margin:8px 0">Multiple colors & sizes available</p>
-          <button class="add-to-cart-btn" data-product="oversized-hoodie" data-name="BONSAID Rooted Resilience Oversized Heavyweight" data-price="61.00" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px">Add to Cart</button>
+          <div class="product-info" style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:15px 0">
+            <div>
+              <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600;line-height:1.2">BONSAID "Rooted Resilience"</h3>
+              <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600;line-height:1.2">Oversized Heavyweight</h3>
+              <p class="price" style="color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 8px">$58.00 - $64.00</p>
+              <p style="color:#888;font-size:14px;margin:0 0 8px;line-height:1.3">Multiple colors & sizes available</p>
+              <p style="color:#888;font-size:14px;margin:0;line-height:1.3">&nbsp;</p>
+            </div>
+            <button class="learn-more-btn" data-product="oversized-hoodie" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;margin-top:auto">Learn More</button>
+          </div>
         </div>
         
-        <div class="store-item" style="background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
-          <div class="product-image" style="margin-bottom:16px;border-radius:8px;overflow:hidden">
-            <img src="bonsaid-hyper - Copy.png" alt="BONSAID Rooted Resilience Premium Hoodie" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+        <div class="store-item" style="width:280px;height:420px;background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:flex;flex-direction:column;justify-content:space-between;margin:0 15px">
+          <div class="product-image" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+            <div class="product-gallery" style="width:100%;height:200px;background:#1a1a1a;border-radius:8px;padding:20px;position:relative;overflow:hidden">
+              <img src="products/heritage/cotton-heritage-m2580-i-unisex-premium-pullover-hoodie-black-front-68f852913d80f.png" alt="BONSAID Premium Hoodie" class="gallery-image active" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:1;transition:opacity 0.5s ease">
+              <img src="products/heritage/cotton-heritage-m2580-i-unisex-premium-pullover-hoodie-white-front-68f852913ded5.png" alt="BONSAID Premium Hoodie White" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+              <img src="products/heritage/cotton-heritage-m2580-i-unisex-premium-pullover-hoodie-military-green-front-68f852913dca9.png" alt="BONSAID Premium Hoodie Green" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+              <img src="products/heritage/cotton-heritage-m2580-i-unisex-premium-pullover-hoodie-charcoal-heather-front-68f852913da67.png" alt="BONSAID Premium Hoodie Charcoal" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+            </div>
           </div>
-          <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600">BONSAID "Rooted Resilience" Hoodie – Premium Print</h3>
-          <p style="color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 8px">$47.00 - $52.00</p>
-          <p style="color:#888;font-size:14px;margin:8px 0">Multiple colors & sizes available</p>
-          <button class="add-to-cart-btn" data-product="premium-hoodie" data-name="BONSAID Rooted Resilience Hoodie – Premium Print" data-price="49.50" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px">Add to Cart</button>
+          <div class="product-info" style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:15px 0">
+            <div>
+              <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600;line-height:1.2">BONSAID "Rooted Resilience"</h3>
+              <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600;line-height:1.2">Hoodie – Premium Print</h3>
+              <p class="price" style="color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 8px">$47.00 - $52.00</p>
+              <p style="color:#888;font-size:14px;margin:0 0 8px;line-height:1.3">Multiple colors & sizes available</p>
+              <p style="color:#888;font-size:14px;margin:0;line-height:1.3">&nbsp;</p>
+            </div>
+            <button class="learn-more-btn" data-product="premium-hoodie" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;margin-top:auto">Learn More</button>
+          </div>
+        </div>
+        
+        <div class="store-item" style="width:280px;height:420px;background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:flex;flex-direction:column;justify-content:space-between;margin:0 15px">
+          <div class="product-image" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+            <div class="product-gallery" style="width:100%;height:200px;background:#1a1a1a;border-radius:8px;padding:20px;position:relative;overflow:hidden">
+              <img src="products/hissat/snapback-trucker-cap-black-front-68f86683df75f.png" alt="BONSAID Trucker Cap" class="gallery-image active" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:1;transition:opacity 0.5s ease">
+              <img src="products/hissat/snapback-trucker-cap-charcoal-black-front-68f86683df8f2.png" alt="BONSAID Trucker Cap Charcoal" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+              <img src="products/hissat/snapback-trucker-cap-heather-grey-black-front-68f86683df93f.png" alt="BONSAID Trucker Cap Heather Grey" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+              <img src="products/hissat/snapback-trucker-cap-loden-front-68f86683df9d0.png" alt="BONSAID Trucker Cap Loden" class="gallery-image" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease">
+            </div>
+          </div>
+          <div class="product-info" style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:15px 0">
+            <div>
+              <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600;line-height:1.2">BONSAID Trucker Cap</h3>
+              <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600;line-height:1.2">&nbsp;</h3>
+              <p class="price" style="color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 8px">Customize at checkout</p>
+              <p style="color:#888;font-size:14px;margin:0 0 8px;line-height:1.3">Multiple colors & sizes available</p>
+              <p style="color:#888;font-size:14px;margin:0;line-height:1.3">&nbsp;</p>
+            </div>
+            <button class="learn-more-btn" data-product="trucker-cap" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;margin-top:auto">Learn More</button>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Product Modal -->
+  <div id="productModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1000;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity 0.3s ease">
+    <div id="modalContent" style="background:#141414;border:1px solid #333;border-radius:16px;padding:30px;max-width:500px;width:100%;max-height:80vh;overflow-y:auto;position:relative">
+      <button id="closeModal" style="position:absolute;top:15px;right:15px;background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer">&times;</button>
+      <div id="modalProductImage" style="text-align:center;margin-bottom:20px">
+        <img id="modalImage" src="" alt="" style="width:200px;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+      </div>
+      <h2 id="modalTitle" style="color:var(--ink);font-size:24px;margin:0 0 10px;text-align:center"></h2>
+      <p id="modalPrice" style="color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 15px;text-align:center"></p>
+      <p id="modalDescription" style="color:var(--muted);font-size:16px;margin:0 0 20px;line-height:1.6"></p>
+      <div id="modalFeatures" style="margin:0 0 20px"></div>
+      <div style="text-align:center">
+        <button id="buyNowBtn" style="background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:15px 30px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:16px;text-transform:uppercase;letter-spacing:0.5px;width:100%">Buy Now</button>
+      </div>
+    </div>
+  </div>
+
   <footer>© <span id="yr"></span> AeroVista · BONSAID — All rights reserved.</footer>
 
-<script src="store-config.js"></script>
+<script src="product-modal.js"></script>
 <script>
 (() => {
   const $ = s => document.querySelector(s);
