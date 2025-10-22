@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BONSAID — Checkout Success</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <style>
+    :root{
+      --bg:#0d0d0d; --panel:#141414; --ink:#e9e5da; --muted:#a89f8b; --gold:#d1a85a; --accent:#8ccf9e; --emerald:#5ac29a; --danger:#ff6b6b;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:url('bg.png') center/cover fixed, radial-gradient(60% 100% at 50% 0%, #162012, #0b0b0b 50%) fixed;color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,Inter,Arial;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .success-container{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--panel);border:1px solid #242424;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:40px;text-align:center;max-width:500px;margin:20px}
+    h1{color:var(--gold);font-size:32px;margin:0 0 16px;letter-spacing:0.05em}
+    p{color:var(--muted);font-size:16px;margin:0 0 24px;line-height:1.6}
+    .success-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--emerald),var(--accent));border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-size:32px;color:#000}
+    .btn{background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.2s ease}
+    .btn:hover{background:linear-gradient(135deg,#ffd700,#ffa500);transform:scale(1.05)}
+  </style>
+</head>
+<body>
+  <div class="success-container">
+    <div class="success-icon">✓</div>
+    <h1>Order Confirmed!</h1>
+    <p>Thank you for your BONSAID purchase! Your order has been processed and you'll receive a confirmation email shortly.</p>
+    <p>Your merchandise will be shipped within 3-5 business days.</p>
+    <a href="index.html" class="btn">Return to BONSAID</a>
+  </div>
+</body>
+</html>

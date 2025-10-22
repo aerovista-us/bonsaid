@@ -235,8 +235,70 @@
     </div>
   </div>
 
+  <!-- BONSAID Store Section -->
+  <section class="store-section" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 50%,#1a1a1a 100%);padding:40px 0;border-top:1px solid #333;margin-top:40px">
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
+      <h2 style="text-align:center;color:var(--gold);font-size:32px;margin-bottom:8px;letter-spacing:0.05em">BONSAID Store</h2>
+      <p style="text-align:center;color:var(--muted);margin-bottom:40px;font-size:16px">Music & Merchandise</p>
+      
+      <!-- Cart Summary (initially hidden) -->
+      <div id="cartSummary" style="display:none;background:#0a0a0a;border:1px solid #333;border-radius:12px;padding:20px;margin-bottom:30px">
+        <h3 style="color:var(--gold);margin:0 0 15px;font-size:18px">Your Cart</h3>
+        <div id="cartItems"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:15px;padding-top:15px;border-top:1px solid #333">
+          <strong style="color:var(--ink)">Total: $<span id="cartTotal">0.00</span></strong>
+          <button class="checkout-btn" id="checkoutBtn" style="background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:15px;font-size:16px">
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+      
+      <div class="store-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;max-width:1200px;margin:0 auto;padding:0 20px">
+        <div class="store-item" style="background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
+          <div class="product-image" style="margin-bottom:16px;border-radius:8px;overflow:hidden">
+            <img src="bonsaid-hyper - Copy.png" alt="BONSAID Stickers" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          </div>
+          <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600">BONSAID Sticker Pack</h3>
+          <div class="size-options" style="margin:15px 0">
+            <div class="size-option" style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#0a0a0a;border-radius:6px;margin-bottom:8px">
+              <span style="color:var(--ink)">3" x 3"</span>
+              <span style="color:var(--gold);font-weight:bold">$5.50</span>
+              <button class="add-to-cart-btn" data-product="stickers-3x3" data-name="BONSAID Stickers (3x3)" data-price="5.50" style="padding:6px 12px;font-size:12px;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;border-radius:4px;cursor:pointer">Add</button>
+            </div>
+            <div class="size-option" style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#0a0a0a;border-radius:6px">
+              <span style="color:var(--ink)">5.5" x 5.5"</span>
+              <span style="color:var(--gold);font-weight:bold">$7.50</span>
+              <button class="add-to-cart-btn" data-product="stickers-5x5" data-name="BONSAID Stickers (5.5x5.5)" data-price="7.50" style="padding:6px 12px;font-size:12px;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;border-radius:4px;cursor:pointer">Add</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="store-item" style="background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
+          <div class="product-image" style="margin-bottom:16px;border-radius:8px;overflow:hidden">
+            <img src="bonsaid-hyper - Copy.png" alt="BONSAID Rooted Resilience Oversized Heavyweight" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          </div>
+          <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600">BONSAID "Rooted Resilience" Oversized Heavyweight</h3>
+          <p style="color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 8px">$58.00 - $64.00</p>
+          <p style="color:#888;font-size:14px;margin:8px 0">Multiple colors & sizes available</p>
+          <button class="add-to-cart-btn" data-product="oversized-hoodie" data-name="BONSAID Rooted Resilience Oversized Heavyweight" data-price="61.00" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px">Add to Cart</button>
+        </div>
+        
+        <div class="store-item" style="background:#141414;border:1px solid #333;border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
+          <div class="product-image" style="margin-bottom:16px;border-radius:8px;overflow:hidden">
+            <img src="bonsaid-hyper - Copy.png" alt="BONSAID Rooted Resilience Premium Hoodie" style="width:100%;height:200px;object-fit:contain;background:#1a1a1a;border-radius:8px;padding:20px">
+          </div>
+          <h3 style="color:var(--ink);font-size:18px;margin:0 0 8px;font-weight:600">BONSAID "Rooted Resilience" Hoodie – Premium Print</h3>
+          <p style="color:var(--gold);font-size:20px;font-weight:bold;margin:0 0 8px">$47.00 - $52.00</p>
+          <p style="color:#888;font-size:14px;margin:8px 0">Multiple colors & sizes available</p>
+          <button class="add-to-cart-btn" data-product="premium-hoodie" data-name="BONSAID Rooted Resilience Hoodie – Premium Print" data-price="49.50" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8941f);color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.2s ease;font-size:14px;text-transform:uppercase;letter-spacing:0.5px">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer>© <span id="yr"></span> AeroVista · BONSAID — All rights reserved.</footer>
 
+<script src="store-config.js"></script>
 <script>
 (() => {
   const $ = s => document.querySelector(s);
